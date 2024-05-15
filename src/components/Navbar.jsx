@@ -185,7 +185,7 @@ const NavBar = ({ userInfos }) => {
             key="login-discord"
             className="mr-4"
           >
-            <Link href="https://discord.com/oauth2/authorize?client_id=1173621217002000385&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fdiscord%2Flogin&scope=identify+guilds.members.read">
+            <Link href={process.env.DISCORD_OAUTH_URL}>
               <FormattedMessage id="Nav.DiscordLogin" />
             </Link>
           </NavbarMenuItem>
