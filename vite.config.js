@@ -13,6 +13,9 @@ export default defineConfig(({ mode }) => {
       "process.env.GOOGLE_MAP_API_KEY": JSON.stringify(env.GOOGLE_MAP_API_KEY),
       "process.env.JWT_SECRET": JSON.stringify(env.VITE_JWT_SECRET),
       "process.env.API_BASE_URL": JSON.stringify(env.VITE_API_BASE_URL),
+      "process.env.DISCORD_OAUTH_URL": JSON.stringify(
+        env.VITE_DISCORD_OAUTH_URL
+      ),
     },
     plugins: [svgr(), react()],
   };
