@@ -1,6 +1,7 @@
 {
   "fr": {
     "Common.Orops": "On rejoue ou pas",
+    "Common.Title": "Titre",
     "Cookies.Accept": "Accepter",
     "Cookies.Decline": "Décliner",
     "Footer.Legal": "Legal",
@@ -9,9 +10,15 @@
     "Home.WhoAmI": "Qui suis-je ?",
     "Nav.Boardgames": "Les jeux",
     "Nav.Contact": "Contact",
+    "Nav.DiscordLogin": "Login Discord",
+    "Nav.DiscordLogout": "Se déconnecter",
+    "Nav.Home": "Accueil",
     "Nav.PrixLudique": "Prix Ludique",
-    "Nav.DiscordLogin": "Se connecter avec Discord",
-    "Nav.DiscordLogout": "Se déconnecter"
+    "Nav.Search": "Rechercher un jeu",
+    "Nav.Search.Description": "Dans toute notre BDD",
+    "Orop.Watch": "On rejoue ou pas ?",
+    "SearchBg.Subtitle": "Dans la base de données",
+    "SearchBg.Title": "RECHERCHER UN JEU"
   },
   "en": {}
 }

@@ -21,13 +21,13 @@ export default {
   darkMode: "class",
   plugins: [
     nextui({
-      defaultTheme: 'light',
+      defaultTheme: "light",
       themes: {
         dark: {
           colors: {
-            background: '#262626',
+            background: "#262626",
             foreground: "white",
-          }
+          },
         },
         light: {
           colors: {
@@ -35,12 +35,16 @@ export default {
             foreground: "#262626",
             primary: {
               foreground: "#e5e5e5",
-              DEFAULT: "#e5e5e5"
+              DEFAULT: "#e5e5e5",
+            },
+            secondary: {
+              foreground: "#ffffff",
+              DEFAULT: "#191815",
             },
             content1: "#e5e5e5",
           },
         },
-      }
+      },
     }),
   ],
 };

@@ -1,10 +1,23 @@
 import axios from "axios";
-import { clear, getItem, setItem } from "localforage";
+import { getItem, setItem } from "localforage";
+import { deburr } from "lodash";
+
+export const getApiKey = async () => {
+  try {
+    const userApiKey = await getItem("apikey");
+    if (!userApiKey) {
+      return process.env.API_KEY;
+    }
+    return userApiKey;
+  } catch (error) {
+    return process.env.API_KEY;
+  }
+};
 
 export const fetchUserInfos = async () => {
   try {
     const apikey = await getItem("apikey");
-    console.log("api key :", apikey);
+
     const user = await axios({
       method: "get",
       baseURL: process.env.API_BASE_URL,
@@ -21,5 +34,23 @@ export const fetchUserInfos = async () => {
     return;
   } catch (error) {
     console.log("[fetchUserInfos] error ", error);
+  }
+};
+
+export const searchOrop = async (query) => {
+  try {
+    const value = await query.queryKey[1];
+    console.log("valueeeeeee", value);
+    const apikey = await getApiKey();
+    const { data } = await axios({
+      headers: { apikey },
+      method: "get",
+      baseURL: process.env.API_BASE_URL,
+      url: "/orop/search",
+      params: { title: deburr(value) },
+    });
+    return data;
+  } catch (error) {
+    return error.message;
   }
 };
