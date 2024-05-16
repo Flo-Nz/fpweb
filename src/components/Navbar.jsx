@@ -17,18 +17,22 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   ChevronDown,
+  DiscordIcon,
+  FacebookIcon,
+  InstagramIcon,
+  YoutubeIcon,
 } from "./Icons";
 import { mainNav } from "../assets/content/navigationMenu";
 import { useState } from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { logoutUser } from "../lib/user";
-import { capitalize } from "lodash";
 
 const icons = {
   chevron: <ChevronDown fill="currentColor" size={16} />,
 };
 
 const NavBar = ({ userInfos }) => {
+  const intl = useIntl();
   const location = useLocation();
   const navigate = useNavigate();
   const currentLocation = location.pathname.split("/")?.[1];
@@ -36,175 +40,286 @@ const NavBar = ({ userInfos }) => {
   const { isLogged } = userInfos;
 
   return (
-    <Navbar
-      key={"main-navbar"}
-      onMenuOpenChange={setIsMenuOpen}
-      className="justify-start w-full max-w-[100%]"
-    >
-      <NavbarContent className="text-white">
-        <NavbarMenuToggle
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="lg:hidden"
-        />
-        <NavbarBrand key={"navbar-brand"}>
-          <Link href="/">
-            <Image src="/logo.png" alt="logo" isZoomed width={100} className="logo" />
-            <p className="font-semibold text-2xl">FIRSTPLAYER</p>
-          </Link>
-        </NavbarBrand>
-        {userInfos.username && (
-          <NavbarContent>
-            Salut, {capitalize(userInfos.username)} !
-          </NavbarContent>
-        )}
-
-      </NavbarContent>
-      <NavbarContent
-        key={"center-content"}
-        variant={"underline"}
-        gap={"$3xl"}
-        className="hidden lg:flex"
+    <>
+      <Navbar
+        key={"main-navbar"}
+        onMenuOpenChange={setIsMenuOpen}
+        className="justify-start w-full max-w-[100%]"
       >
-        {mainNav.map((nav) => (
-          <>
-            {nav.elements ? (
-              <Dropdown key={nav.id}>
-                <NavbarItem
-                  key={nav.id}
-                  isActive={currentLocation === nav.id}
-                  className="mr-4"
-                >
-                  <DropdownTrigger key={nav.id}>
+        <NavbarContent className="text-white">
+          <NavbarMenuToggle
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            className="lg:hidden"
+          />
+          <NavbarBrand key={"navbar-brand"}>
+            <Link href="/">
+              <Image
+                src="/logo.png"
+                alt="logo"
+                isZoomed
+                width={100}
+                className="logo"
+              />
+              <p className="font-semibold text-2xl ml-4 lg:ml-0">FIRSTPLAYER</p>
+            </Link>
+          </NavbarBrand>
+          <NavbarContent
+            key={"center-content"}
+            variant={"underline"}
+            gap={"$3xl"}
+            className="flex"
+          >
+            <div className="flex w-full justify-between items-center">
+              <div className="hidden lg:flex">
+                <div className="flex-col text-center mt-2 lg:flex lg:flex-row lg:mt-0">
+                  <Link
+                    href="https://www.facebook.com/FirstPlayerFR/"
+                    target="_blank"
+                  >
                     <Button
-                      disableRipple
-                      className={`text-lg p-0 bg-transparent data-[hover=true]:bg-transparent text-primary ${currentLocation === nav.id ? "font-semibold" : ""
-                        }`}
-                      endContent={icons.chevron}
-                      radius="sm"
-                      variant="light"
-                      key={nav.id}
+                      color="primary"
+                      isIconOnly
+                      className="font-color-white"
                     >
-                      <FormattedMessage id={nav.title} key={nav.title} />
+                      <FacebookIcon fill="black" size={32} />
                     </Button>
-                  </DropdownTrigger>
-                </NavbarItem>
-                <DropdownMenu
-                  aria-label="Boardgames"
-                  className="w-[340px] bg-neutral-200"
-                  itemClasses={{
-                    base: "gap-4",
-                  }}
-                  key={nav.id}
-                >
-                  {nav.elements.map((elem) => (
-                    <DropdownItem
-                      key={elem.id}
-                      description={elem.description}
-                      startContent={icons[elem.icon]}
-                      onPress={() => navigate(elem.path)}
+                  </Link>
+                  <Link
+                    href="https://www.instagram.com/firstplayerfr/"
+                    target="_blank"
+                    className="ml-2"
+                  >
+                    <Button
+                      color="primary"
+                      isIconOnly
+                      className="font-color-white"
                     >
-                      <FormattedMessage id={elem.title} key={elem.title} />
-                    </DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
-            ) : (
-              <>
-                {nav.id !== "home" && (
+                      <InstagramIcon fill="black" size={32} />
+                    </Button>
+                  </Link>
+                  <Link
+                    href="https://www.youtube.com/@FirstPlayerFr"
+                    target="_blank"
+                    className="ml-2"
+                  >
+                    <Button
+                      color="primary"
+                      isIconOnly
+                      className="font-color-white"
+                    >
+                      <YoutubeIcon fill="black" size={32} />
+                    </Button>
+                  </Link>
+                  <Link
+                    href="https://discord.gg/numWSwhHkW"
+                    target="_blank"
+                    className="ml-2"
+                  >
+                    <Button
+                      color="primary"
+                      isIconOnly
+                      className="font-color-white"
+                    >
+                      <DiscordIcon fill="black" size={32} />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </NavbarContent>
+        </NavbarContent>
+        <NavbarContent
+          key={"center-content"}
+          variant={"underline"}
+          gap={"$3xl"}
+          className="hidden lg:flex"
+        >
+          {mainNav.map((nav) => (
+            <>
+              {nav.elements ? (
+                <Dropdown key={nav.id}>
                   <NavbarItem
                     key={nav.id}
                     isActive={currentLocation === nav.id}
                     className="mr-4"
                   >
-                    <Link key={nav.id} itemID={nav.id} href={nav.url ?? `/${nav.path}`}>
-                      <FormattedMessage id={nav.title} key={nav.title} />
-                    </Link>
+                    <DropdownTrigger key={nav.id}>
+                      <Button
+                        disableRipple
+                        className={`text-lg p-0 bg-transparent data-[hover=true]:bg-transparent text-primary ${
+                          currentLocation === nav.id ? "font-semibold" : ""
+                        }`}
+                        endContent={icons.chevron}
+                        radius="sm"
+                        variant="light"
+                        key={nav.id}
+                      >
+                        <FormattedMessage id={nav.title} key={nav.title} />
+                      </Button>
+                    </DropdownTrigger>
                   </NavbarItem>
-                )}
-              </>
-            )}
-          </>
-        ))}
-        {!isLogged && (
-          <NavbarMenuItem
-            key="login-discord"
-            className="mr-4"
-          >
-            <Link href={process.env.DISCORD_OAUTH_URL}>
-              <FormattedMessage id="Nav.DiscordLogin" />
-            </Link>
-          </NavbarMenuItem>
-        )}
-        {isLogged && (
-          <NavbarItem
-            key="logout-discord"
-            className="mr-4"
-          >
-            <Link href="/" onClick={(event) => {
-              event.stopPropagation();
-              logoutUser();
-            }}>
-              <FormattedMessage id="Nav.DiscordLogout" />
-            </Link>
-          </NavbarItem>
-        )}
-      </NavbarContent>
-      <NavbarMenu className="pt-8">
-        {mainNav.map((nav, index) => (
-          <>
-            {nav.elements ? (
-              <>
-                {nav.elements.map((elem) => (
-                  <NavbarMenuItem
-                    key={elem.id + index}
-                    isActive={
-                      currentLocation === nav.id
-                    }
+                  <DropdownMenu
+                    aria-label="Boardgames"
+                    className="w-[340px] bg-neutral-200"
+                    itemClasses={{
+                      base: "gap-4",
+                    }}
+                    key={nav.id}
                   >
-                    <Link key={elem.id + index} itemID={elem.id} href={`/${elem.path}`}>
-                      <FormattedMessage id={elem.title} key={elem.title} />
-                    </Link>
-                  </NavbarMenuItem>
-                ))}
-              </>
-            ) : (
-              <NavbarMenuItem
-                key={nav.id + index}
-                isActive={currentLocation === nav.id}
-                className="mr-4"
+                    {nav.elements.map((elem) => (
+                      <DropdownItem
+                        key={elem.id}
+                        description={intl.formatMessage({
+                          id: elem.description,
+                        })}
+                        startContent={icons[elem.icon]}
+                        onPress={() => navigate(elem.path)}
+                      >
+                        <FormattedMessage id={elem.title} key={elem.title} />
+                      </DropdownItem>
+                    ))}
+                  </DropdownMenu>
+                </Dropdown>
+              ) : (
+                <>
+                  {nav.id !== "home" && (
+                    <NavbarItem
+                      key={nav.id}
+                      isActive={currentLocation === nav.id}
+                      className="mr-4"
+                    >
+                      <Link
+                        key={nav.id}
+                        itemID={nav.id}
+                        href={nav.url ?? `/${nav.path}`}
+                      >
+                        <FormattedMessage id={nav.title} key={nav.title} />
+                      </Link>
+                    </NavbarItem>
+                  )}
+                </>
+              )}
+            </>
+          ))}
+          {!isLogged && (
+            <NavbarMenuItem key="login-discord" className="mr-4">
+              <Link href={process.env.DISCORD_OAUTH_URL}>
+                <Button
+                  startContent={<DiscordIcon fill="white" />}
+                  className="bg-indigo-500 text-primary"
+                >
+                  <FormattedMessage id="Nav.DiscordLogin" />
+                </Button>
+              </Link>
+            </NavbarMenuItem>
+          )}
+          {isLogged && (
+            <NavbarItem key="logout-discord" className="mr-4">
+              <Link href="/">
+                <Button
+                  startContent={<DiscordIcon fill="currentColor" />}
+                  className="border-solid border-2 bg-slate-200 border-indigo-500 text-indigo-500 font-semibold"
+                  onPress={() => {
+                    logoutUser();
+                  }}
+                >
+                  <FormattedMessage id="Nav.DiscordLogout" />
+                </Button>
+              </Link>
+            </NavbarItem>
+          )}
+        </NavbarContent>
+        <NavbarMenu className="pt-8">
+          {mainNav.map((nav, index) => (
+            <>
+              {nav.elements ? (
+                <>
+                  {nav.elements.map((elem) => (
+                    <NavbarMenuItem
+                      key={elem.id + index}
+                      isActive={currentLocation === nav.id}
+                    >
+                      <Link
+                        key={elem.id + index}
+                        itemID={elem.id}
+                        href={`/${elem.path}`}
+                      >
+                        <FormattedMessage id={elem.title} key={elem.title} />
+                      </Link>
+                    </NavbarMenuItem>
+                  ))}
+                </>
+              ) : (
+                <NavbarMenuItem
+                  key={nav.id + index}
+                  isActive={currentLocation === nav.id}
+                  className="mr-4"
+                >
+                  <Link key={nav.id} itemID={nav.id} href={`/${nav.path}`}>
+                    <FormattedMessage id={nav.title} key={nav.title} />
+                  </Link>
+                </NavbarMenuItem>
+              )}
+            </>
+          ))}
+          {!isLogged && (
+            <NavbarMenuItem key="login-discord" className="mr-4">
+              <Link href={process.env.DISCORD_OAUTH_URL}>
+                <FormattedMessage id="Nav.DiscordLogin" />
+              </Link>
+            </NavbarMenuItem>
+          )}
+          {isLogged && (
+            <NavbarMenuItem key="logout-discord" className="mr-4">
+              <Link
+                href="/"
+                onClick={(event) => {
+                  logoutUser();
+                }}
               >
-                <Link key={nav.id} itemID={nav.id} href={`/${nav.path}`}>
-                  <FormattedMessage id={nav.title} key={nav.title} />
-                </Link>
-              </NavbarMenuItem>
-            )}
-          </>
-        ))}
-        {!isLogged && (
-          <NavbarMenuItem
-            key="login-discord"
-            className="mr-4"
+                <FormattedMessage id="Nav.DiscordLogout" />
+              </Link>
+            </NavbarMenuItem>
+          )}
+        </NavbarMenu>
+      </Navbar>
+      <div className="lg:hidden">
+        <div className="flex flex-row justify-center lg:hidden">
+          <Link href="https://www.facebook.com/FirstPlayerFR/" target="_blank">
+            <Button color="primary" isIconOnly className="font-color-white">
+              <FacebookIcon fill="black" size={32} />
+            </Button>
+          </Link>
+          <Link
+            href="https://www.instagram.com/firstplayerfr/"
+            target="_blank"
+            className="ml-1"
           >
-            <Link href={process.env.DISCORD_OAUTH_URL}>
-              <FormattedMessage id="Nav.DiscordLogin" />
-            </Link>
-          </NavbarMenuItem>
-        )}
-        {isLogged && (
-          <NavbarMenuItem
-            key="logout-discord"
-            className="mr-4"
+            <Button color="primary" isIconOnly className="font-color-white">
+              <InstagramIcon fill="black" size={32} />
+            </Button>
+          </Link>
+          <Link
+            href="https://www.youtube.com/@FirstPlayerFr"
+            target="_blank"
+            className="ml-1"
           >
-            <Link href="/" onClick={(event) => {
-              event.stopPropagation();
-              logoutUser();
-            }}>
-              <FormattedMessage id="Nav.DiscordLogout" />
-            </Link>
-          </NavbarMenuItem>
-        )}
-      </NavbarMenu>
-    </Navbar>
+            <Button color="primary" isIconOnly className="font-color-white">
+              <YoutubeIcon fill="black" size={32} />
+            </Button>
+          </Link>
+          <Link
+            href="https://discord.gg/numWSwhHkW"
+            target="_blank"
+            className="ml-1"
+          >
+            <Button color="primary" isIconOnly className="font-color-white">
+              <DiscordIcon fill="black" size={32} />
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </>
   );
 };
 

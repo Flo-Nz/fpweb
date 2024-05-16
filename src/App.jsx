@@ -1,4 +1,10 @@
-import { Outlet, redirect, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Outlet,
+  useLocation,
+  useNavigate,
+  useOutletContext,
+  useSearchParams,
+} from "react-router-dom";
 import "./App.css";
 import NavBar from "./components/Navbar";
 import Layout from "./components/Layout";
@@ -10,16 +16,23 @@ import { useEffect, useState } from "react";
 import { getUserApiKey, getUserInfos, isUserLogged } from "./lib/user";
 import { verifyJwt } from "./lib/jwt";
 import { fetchUserInfos } from "./lib/api";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const intl = useIntl();
-  const [userInfos, setUserInfos] = useState({ isLogged: false, discordId: null, discordRoles: [], apikey: null })
+  const [userInfos, setUserInfos] = useState({
+    isLogged: false,
+    discordId: null,
+    discordRoles: [],
+    apikey: null,
+  });
   const [searchParams, setSearchParams] = useSearchParams();
-  const { pathname } = location
-  console.log('pathname', pathname)
-  const userJwt = searchParams.get('jwt');
+  const { pathname } = location;
+  const userJwt = searchParams.get("jwt");
 
   useEffect(() => {
     const initUserInfos = async () => {
@@ -30,20 +43,25 @@ const App = () => {
       if (apikey) {
         await fetchUserInfos();
         setUserInfos(await getUserInfos());
-        navigate(pathname);
+        setSearchParams(undefined);
       }
-    }
+    };
+
     if (!userInfos.isLogged) {
       initUserInfos();
     }
-  }, [])
-
-  console.log('is logged in App.jsx', userInfos)
+  }, [userInfos.isLogged]);
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <NavBar userInfos={userInfos} />
-      <Layout>{location?.pathname === "/" ? <Home userInfos={userInfos} /> : <Outlet userInfos={userInfos} />}</Layout>
+      <Layout>
+        {location?.pathname === "/" ? (
+          <Home userInfos={userInfos} />
+        ) : (
+          <Outlet context={{ userInfos }} />
+        )}
+      </Layout>
       <Footer />
       <CookieConsent
         location="bottom"
@@ -59,8 +77,10 @@ const App = () => {
       >
         <FormattedMessage id="Cookies.Text" />
       </CookieConsent>
-    </>
+    </QueryClientProvider>
   );
 };
 
 export default App;
+
+export const useUserInfos = () => useOutletContext();

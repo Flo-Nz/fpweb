@@ -5,9 +5,9 @@ import { FormattedMessage, useIntl } from "react-intl";
 import parse from "html-react-parser";
 import { verifyJwt } from "../lib/jwt";
 
-const Home = () => {
-  const navigate = useNavigate();
+const Home = ({ userInfos }) => {
   const intl = useIntl();
+  console.log("Home user infos ", userInfos);
 
   return (
     <div id="intro">
@@ -28,10 +28,10 @@ const Home = () => {
 
           <div className="flex flex-col gap-0 items-center lg:items-start">
             <div className="flex flex-col gap-0">
-              <h1 className="font-medium text-xl">
+              <h1 className="font-medium text-xl mt-6 lg:mt-0">
                 <FormattedMessage id="Home.WhoAmI" />
               </h1>
-              <p className="gap-0 text-small italic">
+              <p className="gap-0 text-small italic text-center lg:text-start">
                 <i>Yoël Sayada</i>
               </p>
             </div>
@@ -52,7 +52,6 @@ const Home = () => {
           </div>
         </CardBody>
       </Card>
-
     </div>
   );
 };
