@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => {
       "process.env.DISCORD_OAUTH_URL": JSON.stringify(
         env.VITE_DISCORD_OAUTH_URL
       ),
+      "process.env.API_KEY": JSON.stringify(env.VITE_FP_API_KEY),
     },
     plugins: [svgr(), react()],
   };

@@ -11,9 +11,9 @@ export const mainNav = [
     elements: [
       {
         id: "orop-list",
-        title: "Common.Orops",
-        path: "boardgames/orop",
-        description: "Parcourir les jeux",
+        title: "Nav.Search",
+        path: "boardgames/search",
+        description: "Nav.Search.Description",
       },
     ],
   },
