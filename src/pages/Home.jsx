@@ -7,6 +7,7 @@ import { verifyJwt } from "../lib/jwt";
 
 const Home = ({ userInfos }) => {
   const intl = useIntl();
+  console.log("Home user infos ", userInfos);
 
   return (
     <div id="intro">
