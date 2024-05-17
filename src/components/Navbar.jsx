@@ -18,6 +18,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   ChevronDown,
   DiscordIcon,
+<<<<<<< HEAD
+  DiscordOutlineIcon,
+=======
+>>>>>>> ed1d623e2503d25deae00823981673329c7debae
   FacebookIcon,
   InstagramIcon,
   YoutubeIcon,
@@ -58,9 +62,11 @@ const NavBar = ({ userInfos }) => {
                 alt="logo"
                 isZoomed
                 width={100}
-                className="logo"
+                className="logo hidden md:flex lg:flex"
               />
-              <p className="font-semibold text-2xl ml-4 lg:ml-0">FIRSTPLAYER</p>
+              <h1 className="font-semibold text-2xl ml-4 lg:ml-0">
+                FIRSTPLAYER
+              </h1>
             </Link>
           </NavbarBrand>
           <NavbarContent
@@ -120,7 +126,7 @@ const NavBar = ({ userInfos }) => {
                       isIconOnly
                       className="font-color-white"
                     >
-                      <DiscordIcon fill="black" size={32} />
+                      <DiscordOutlineIcon fill="black" size={32} />
                     </Button>
                   </Link>
                 </div>
@@ -314,7 +320,7 @@ const NavBar = ({ userInfos }) => {
             className="ml-1"
           >
             <Button color="primary" isIconOnly className="font-color-white">
-              <DiscordIcon fill="black" size={32} />
+              <DiscordOutlineIcon fill="black" size={32} />
             </Button>
           </Link>
         </div>
