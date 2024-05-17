@@ -40,14 +40,32 @@ export const fetchUserInfos = async () => {
 export const searchOrop = async (query) => {
   try {
     const value = await query.queryKey[1];
-    console.log("valueeeeeee", value);
     const apikey = await getApiKey();
+
     const { data } = await axios({
       headers: { apikey },
       method: "get",
       baseURL: process.env.API_BASE_URL,
       url: "/orop/search",
       params: { title: deburr(value) },
+    });
+    return data;
+  } catch (error) {
+    return error.message;
+  }
+};
+
+export const postUserRating = async (title, userId, rating) => {
+  try {
+    const apikey = await getApiKey();
+    const body = { title, userId, rating };
+
+    const { data } = await axios({
+      headers: { apikey },
+      method: "post",
+      baseURL: process.env.API_BASE_URL,
+      url: "/discordorop",
+      data: body,
     });
     return data;
   } catch (error) {

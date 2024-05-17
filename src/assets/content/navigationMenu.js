@@ -17,9 +17,4 @@ export const mainNav = [
       },
     ],
   },
-  {
-    id: "prixludique",
-    title: "Nav.PrixLudique",
-    path: "prix-ludique",
-  },
 ];

@@ -1,18 +1,9 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Input,
-  Spinner,
-} from "@nextui-org/react";
+import { Card, CardBody, Input, Spinner } from "@nextui-org/react";
 import { SearchIcon } from "../components/Icons";
 import { FormattedMessage, useIntl } from "react-intl";
-import parse from "html-react-parser";
 import { useUserInfos } from "../App";
-import { useDeferredValue, useEffect, useState } from "react";
+import { useState } from "react";
 import { searchOrop } from "../lib/api";
-import { upperCase } from "lodash";
 import { useQuery } from "@tanstack/react-query";
 import BoardgameCard from "../components/BoardgameCard";
 
@@ -20,7 +11,7 @@ const SearchBoardgames = () => {
   const intl = useIntl();
   const { userInfos } = useUserInfos();
   const [inputValue, setInputValue] = useState("");
-  const [searchValue, setSearchValue] = useState("");
+  const [activePage, setActivePage] = useState(1);
 
   const {
     isPending,
@@ -32,9 +23,6 @@ const SearchBoardgames = () => {
     refetchOnWindowFocus: false,
     enabled: !!inputValue,
   });
-
-  console.log("is pending : ", isPending);
-  console.log("is error : ", isError);
 
   return (
     <div id="intro">
@@ -83,15 +71,29 @@ const SearchBoardgames = () => {
             />
           </div>
           <div className="mt-8">
-            <h1>Results</h1>
+            <h2 className="font-semibold text-xl">
+              <FormattedMessage id="Common.Results" />
+            </h2>
+            <h3 className="mt-1">
+              <FormattedMessage
+                id={
+                  boardgames?.length === 24
+                    ? "SearchBg.ResultsLimit"
+                    : "SearchBg.ResultsCount"
+                }
+                values={{ resultsCount: boardgames?.length }}
+              />
+            </h3>
             {isPending && (
               <div className="full-w">
                 <Spinner color="black" />
               </div>
             )}
-            <div className="grid grid-cols-1 gap-2 lg:grid-cols-4 lg:gap-2">
+            <div className="grid grid-cols-1 gap-4 mt-4 lg:grid-cols-3 lg:gap-4">
               {boardgames.length > 0 &&
-                boardgames.map((bg) => <BoardgameCard boardgame={bg} />)}
+                boardgames.map((bg) => (
+                  <BoardgameCard boardgame={bg} userInfos={userInfos} />
+                ))}
             </div>
           </div>
         </CardBody>
