@@ -18,10 +18,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   ChevronDown,
   DiscordIcon,
-<<<<<<< HEAD
   DiscordOutlineIcon,
-=======
->>>>>>> ed1d623e2503d25deae00823981673329c7debae
   FacebookIcon,
   InstagramIcon,
   YoutubeIcon,
