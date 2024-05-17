@@ -40,7 +40,8 @@ const YoutubeEmbed = ({ youtubeUrl }) => {
     <iframe
       allowfullscreen=""
       frameborder="0"
-      height="200"
+      height="250"
+      width={450}
       src={embedUrl}
       id={getYoutubeId(youtubeUrl)}
       className="max-w-full"
