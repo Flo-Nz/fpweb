@@ -12,7 +12,7 @@ import { capitalize, find } from "lodash";
 import { FormattedMessage, useIntl } from "react-intl";
 import { CheckIcon, ChevronDown, DiscordIcon } from "./Icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { postUserRating } from "../lib/api";
+import { postUserRating, removeUserRating } from "../lib/api";
 import { useState } from "react";
 
 const getUserRating = (boardgame, discordId) => {
@@ -33,11 +33,21 @@ const BgCardUserSection = ({ boardgame, userInfos }) => {
   const intl = useIntl();
 
   const updateRating = useMutation({
-    mutationFn: ({ title, userId, rating }) =>
-      postUserRating(title, userId, rating),
+    mutationFn: ({ title, rating }) => postUserRating(title, rating),
     onSuccess: () => {
       setError(null);
       queryClient.invalidateQueries({ queryKey: ["searchResults"] });
+      queryClient.invalidateQueries({ queryKey: ["myRatings"] });
+    },
+    onError: (err) => setError(err),
+  });
+
+  const removeRating = useMutation({
+    mutationFn: ({ title }) => removeUserRating(title),
+    onSuccess: () => {
+      setError(null);
+      queryClient.invalidateQueries({ queryKey: ["searchResults"] });
+      queryClient.invalidateQueries({ queryKey: ["myRatings"] });
     },
     onError: (err) => setError(err),
   });
@@ -73,87 +83,44 @@ const BgCardUserSection = ({ boardgame, userInfos }) => {
       <h1 className="font-semibold">{capitalize(username)}</h1>
       <div className="flex flex-row items-center">
         <div>
-          {userRating ? (
-            <Dropdown
-              placement="bottom-end"
-              backdrop="blur"
-              aria-label="rating"
-            >
-              <DropdownTrigger>
-                <Button
-                  endContent={
-                    updateRating.isPending ? (
-                      <Spinner />
-                    ) : (
-                      <ChevronDown fill={"currentColor"} />
-                    )
-                  }
-                >
+          <Dropdown placement="bottom-end" backdrop="blur" aria-label="rating">
+            <DropdownTrigger>
+              <Button
+                endContent={
+                  updateRating.isPending ? (
+                    <Spinner />
+                  ) : (
+                    <ChevronDown fill={"currentColor"} />
+                  )
+                }
+              >
+                {userRating ? (
                   <Image src={`/${userRating}.webp`} width={35} />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                onAction={(rating) =>
-                  updateRating.mutate({
-                    title: boardgame.title[0],
-                    userId: discordId,
-                    rating,
-                  })
-                }
-              >
-                {ratings.map((rating) => (
-                  <DropdownItem
-                    key={rating}
-                    description={intl.formatMessage({
-                      id: `Ratings.${rating}`,
-                    })}
-                  >
-                    <Image src={`/${rating}.webp`} width={25} />
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-          ) : (
-            <Dropdown
-              placement="bottom-end"
-              backdrop="blur"
-              aria-label="rating"
-            >
-              <DropdownTrigger>
-                <Button
-                  endContent={
-                    updateRating.isPending ? (
-                      <Spinner />
-                    ) : (
-                      <ChevronDown fill={"currentColor"} />
-                    )
-                  }
-                >
+                ) : (
                   <FormattedMessage id="BgCardUserSection.RateThisBg" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                onAction={(rating) =>
-                  updateRating.mutate({
-                    title: boardgame.title[0],
-                    userId: discordId,
-                    rating,
-                  })
-                }
-              >
-                {ratings.map((rating) => (
-                  <DropdownItem
-                    key={rating}
-                    description={intl.formatMessage({
-                      id: `Ratings.${rating}`,
-                    })}
-                  >
-                    <Image src={`/${rating}.webp`} width={25} />
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-          )}
+                )}
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              onAction={(rating) =>
+                updateRating.mutate({
+                  title: boardgame.title[0],
+                  rating,
+                })
+              }
+            >
+              {ratings.map((rating) => (
+                <DropdownItem
+                  key={rating}
+                  description={intl.formatMessage({
+                    id: `Ratings.${rating}`,
+                  })}
+                >
+                  <Image src={`/${rating}.webp`} width={25} />
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
         </div>
         {updateRating.isSuccess && (
           <div>
@@ -169,6 +136,17 @@ const BgCardUserSection = ({ boardgame, userInfos }) => {
             </Button>
           </div>
         )}
+      </div>
+      <div>
+        <Button
+          onPress={() => removeRating.mutate({ title: boardgame.title[0] })}
+          variant="light"
+          size="sm"
+          color="danger"
+          className="mt-2"
+        >
+          <FormattedMessage id="BgCardUserSection.RemoveRating" />
+        </Button>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getItem, setItem } from "localforage";
 import { deburr } from "lodash";
+import { getUserDiscordId, getUserId } from "./user";
 
 export const getApiKey = async () => {
   try {
@@ -55,20 +56,44 @@ export const searchOrop = async (query) => {
   }
 };
 
-export const postUserRating = async (title, userId, rating) => {
-  try {
-    const apikey = await getApiKey();
-    const body = { title, userId, rating };
+export const userRatings = async (query) => {
+  const apikey = await getApiKey();
 
-    const { data } = await axios({
-      headers: { apikey },
-      method: "post",
-      baseURL: process.env.API_BASE_URL,
-      url: "/discordorop",
-      data: body,
-    });
-    return data;
-  } catch (error) {
-    return error.message;
-  }
+  const { data } = await axios({
+    headers: { apikey },
+    method: "get",
+    baseURL: process.env.API_BASE_URL,
+    url: "/discordorop/ratings",
+    params: { noLimit: true },
+  });
+  return data;
+};
+
+export const postUserRating = async (title, rating) => {
+  const apikey = await getApiKey();
+  const body = { title, rating };
+
+  const { data } = await axios({
+    headers: { apikey },
+    method: "post",
+    baseURL: process.env.API_BASE_URL,
+    url:
+      apikey === process.env.YOEL_API_KEY ? "/fporop/rating" : "/discordorop",
+    data: body,
+  });
+  return data;
+};
+
+export const removeUserRating = async (title, rating) => {
+  const apikey = await getApiKey();
+  const params = { title };
+
+  const { data } = await axios({
+    headers: { apikey },
+    method: "put",
+    baseURL: process.env.API_BASE_URL,
+    url: "/discordorop/ratings/remove",
+    params,
+  });
+  return data;
 };

@@ -172,9 +172,13 @@ const NavBar = ({ userInfos }) => {
                     {nav.elements.map((elem) => (
                       <DropdownItem
                         key={elem.id}
-                        description={intl.formatMessage({
-                          id: elem.description,
-                        })}
+                        description={
+                          elem?.description
+                            ? intl.formatMessage({
+                                id: elem.description,
+                              })
+                            : ""
+                        }
                         startContent={icons[elem.icon]}
                         onPress={() => navigate(elem.path)}
                       >

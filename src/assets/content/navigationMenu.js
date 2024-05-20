@@ -17,4 +17,12 @@ export const mainNav = [
       },
     ],
   },
+  {
+    id: "myaccount",
+    title: "Nav.MyInfos",
+    path: "my-account",
+    elements: [
+      { id: "my-ratings", title: "Nav.MyRatings", path: "my-account/ratings" },
+    ],
+  },
 ];

@@ -92,7 +92,11 @@ const SearchBoardgames = () => {
             <div className="grid grid-cols-1 gap-4 mt-4 lg:grid-cols-3 lg:gap-4">
               {boardgames.length > 0 &&
                 boardgames.map((bg) => (
-                  <BoardgameCard boardgame={bg} userInfos={userInfos} />
+                  <BoardgameCard
+                    key={bg._id?.toString()}
+                    boardgame={bg}
+                    userInfos={userInfos}
+                  />
                 ))}
             </div>
           </div>
