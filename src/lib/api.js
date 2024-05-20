@@ -70,21 +70,18 @@ export const userRatings = async (query) => {
 };
 
 export const postUserRating = async (title, rating) => {
-  try {
-    const apikey = await getApiKey();
-    const body = { title, rating };
+  const apikey = await getApiKey();
+  const body = { title, rating };
 
-    const { data } = await axios({
-      headers: { apikey },
-      method: "post",
-      baseURL: process.env.API_BASE_URL,
-      url: "/discordorop",
-      data: body,
-    });
-    return data;
-  } catch (error) {
-    return error.message;
-  }
+  const { data } = await axios({
+    headers: { apikey },
+    method: "post",
+    baseURL: process.env.API_BASE_URL,
+    url:
+      apikey === process.env.YOEL_API_KEY ? "/fporop/rating" : "/discordorop",
+    data: body,
+  });
+  return data;
 };
 
 export const removeUserRating = async (title, rating) => {

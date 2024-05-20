@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
         env.VITE_DISCORD_OAUTH_URL
       ),
       "process.env.API_KEY": JSON.stringify(env.VITE_FP_API_KEY),
+      "process.env.YOEL_API_KEY": JSON.stringify(env.VITE_YOEL_API_KEY),
     },
     plugins: [svgr(), react()],
   };
