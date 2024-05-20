@@ -137,17 +137,19 @@ const BgCardUserSection = ({ boardgame, userInfos }) => {
           </div>
         )}
       </div>
-      <div>
-        <Button
-          onPress={() => removeRating.mutate({ title: boardgame.title[0] })}
-          variant="light"
-          size="sm"
-          color="danger"
-          className="mt-2"
-        >
-          <FormattedMessage id="BgCardUserSection.RemoveRating" />
-        </Button>
-      </div>
+      {userRating && (
+        <div>
+          <Button
+            onPress={() => removeRating.mutate({ title: boardgame.title[0] })}
+            variant="light"
+            size="sm"
+            color="danger"
+            className="mt-2"
+          >
+            <FormattedMessage id="BgCardUserSection.RemoveRating" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
