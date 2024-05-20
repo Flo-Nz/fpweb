@@ -3,6 +3,7 @@ import Root from "./root";
 import ErrorPage from "../pages/Error";
 import Legal from "../pages/Legal";
 import SearchBoardgames from "../pages/SearchBoardgames";
+import MyRatings from "../pages/MyRatings";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
         element: <Navigate to={"/boardgames/search"} />,
       },
       { path: "/boardgames/search", element: <SearchBoardgames /> },
+      { path: "/my-account/ratings", element: <MyRatings /> },
       {
         path: "/legal",
         element: <Legal />,

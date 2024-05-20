@@ -43,7 +43,7 @@ const App = () => {
       if (apikey) {
         await fetchUserInfos();
         setUserInfos(await getUserInfos());
-        setSearchParams(undefined);
+        setSearchParams("");
       }
     };
 

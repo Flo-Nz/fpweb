@@ -7,10 +7,10 @@ import {
   Divider,
   Image,
 } from "@nextui-org/react";
-import { upperCase } from "lodash";
+import { capitalize, upperCase } from "lodash";
 import YoutubeEmbed from "./YoutubeEmbed";
 import { DiscordIcon, YoutubeIcon } from "./Icons";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useState } from "react";
 import BgCardUserSection from "./BgCardUserSection";
 
@@ -19,12 +19,13 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
   const { _id, title, discordRating, discordOrop, searchCount, fpOrop } =
     boardgame;
 
+  const intl = useIntl();
+
   return (
     <Card
       className="bg-gradient-to-b from-zinc-200 to-slate-200"
       fullWidth
       shadow="md"
-      isFooterBlurred
       key={_id.toString()}
     >
       <CardHeader>
@@ -93,28 +94,43 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
           )}
           {displayEmbed && <YoutubeEmbed youtubeUrl={fpOrop?.youtubeUrl} />}
           {!fpOrop?.youtubeUrl && (
-            <Button
-              startContent={<YoutubeIcon fill={"currentColor"} />}
-              disabled
-              disableAnimation
-              disableRipple
-              className="text-gray-500"
-            >
-              <FormattedMessage id="Orop.Missing" />
-            </Button>
+            <>
+              <Button
+                startContent={<YoutubeIcon fill={"currentColor"} />}
+                disabled
+                disableAnimation
+                disableRipple
+                className="text-gray-500"
+              >
+                <FormattedMessage id="Orop.Missing" />
+              </Button>
+            </>
           )}
         </div>
         <Divider className="mt-6" />
         <div className="flex">
           <BgCardUserSection userInfos={userInfos} boardgame={boardgame} />
         </div>
+        <Divider className="mt-2" />
+        <div className="bg-transparent text-sm text-right grid grid-cols-1 flex-1 mt-2">
+          {boardgame.title.length > 1 && (
+            <div className="w-full">
+              <span className="font-semibold">
+                {intl.formatMessage({ id: "Boardgame.AlternateTitles" })} :{" "}
+              </span>
+              {boardgame.title.slice(1).map((alternateTitle, index) => (
+                <span key={alternateTitle + index}>
+                  {capitalize(alternateTitle)}
+                  {index === boardgame.title.slice(1).length - 1
+                    ? ""
+                    : ","}{" "}
+                </span>
+              ))}
+            </div>
+          )}
+          <FormattedMessage id="Common.SearchCount" values={{ searchCount }} />
+        </div>
       </CardBody>
-      <CardFooter className="bg-transparent text-sm text-right">
-        <FormattedMessage
-          id="Common.SearchCount"
-          values={{ searchCount: boardgame.searchCount }}
-        />
-      </CardFooter>
     </Card>
   );
 };
