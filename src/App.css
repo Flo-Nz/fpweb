@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-p {
-  text-align: justify;
-}
-
 header {
   max-width: 100% !important;
 }

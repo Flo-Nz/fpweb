@@ -14,6 +14,7 @@ import { CheckIcon, ChevronDown, DiscordIcon } from "./Icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postUserRating, removeUserRating } from "../lib/api";
 import { useState } from "react";
+import useScreenMobile from "../hooks/useScreenMobile";
 
 const getUserRating = (boardgame, discordId) => {
   if (!discordId) {
@@ -77,34 +78,24 @@ const BgCardUserSection = ({ boardgame, userInfos }) => {
   }
   const { username, discordId } = userInfos;
   const userRating = getUserRating(boardgame, discordId);
+  const isMobile = useScreenMobile();
 
   return (
     <div className="mt-2">
       <h1 className="font-semibold">{capitalize(username)}</h1>
       <div className="flex flex-row items-center">
         <div>
-          <Dropdown placement="bottom-end" backdrop="blur" aria-label="rating">
+          <Dropdown showArrow backdrop={!isMobile ? "blur" : "transparent"}>
             <DropdownTrigger>
-              <Button
-                endContent={
-                  updateRating.isPending ? (
-                    <Spinner />
-                  ) : (
-                    <ChevronDown fill={"currentColor"} />
-                  )
-                }
-              >
-                {userRating ? (
-                  <Image src={`/${userRating}.webp`} width={35} />
-                ) : (
-                  <FormattedMessage id="BgCardUserSection.RateThisBg" />
-                )}
+              <Button endContent={<ChevronDown fill={"currentColor"} />}>
+                <Image src={`/${userRating}.webp`} width={35} />
               </Button>
             </DropdownTrigger>
             <DropdownMenu
               onAction={(rating) =>
                 updateRating.mutate({
                   title: boardgame.title[0],
+                  userId: discordId,
                   rating,
                 })
               }
@@ -116,7 +107,11 @@ const BgCardUserSection = ({ boardgame, userInfos }) => {
                     id: `Ratings.${rating}`,
                   })}
                 >
-                  <Image src={`/${rating}.webp`} width={25} />
+                  {userRating ? (
+                    <Image src={`/${rating}.webp`} width={25} />
+                  ) : (
+                    <FormattedMessage id="BgCardUserSection.RateThisBg" />
+                  )}
                 </DropdownItem>
               ))}
             </DropdownMenu>
@@ -137,19 +132,6 @@ const BgCardUserSection = ({ boardgame, userInfos }) => {
           </div>
         )}
       </div>
-      {userRating && (
-        <div>
-          <Button
-            onPress={() => removeRating.mutate({ title: boardgame.title[0] })}
-            variant="light"
-            size="sm"
-            color="danger"
-            className="mt-2"
-          >
-            <FormattedMessage id="BgCardUserSection.RemoveRating" />
-          </Button>
-        </div>
-      )}
     </div>
   );
 };
