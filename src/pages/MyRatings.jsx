@@ -44,7 +44,7 @@ const MyRatings = () => {
   const updateSearchValue = (value) => {
     setInputValue(value);
     const results = filter(boardgames, (boardgame) => {
-      const valueRegexp = new RegExp(value);
+      const valueRegexp = new RegExp(value, "i");
       for (const title of boardgame.title) {
         if (valueRegexp.test(title)) {
           return true;
