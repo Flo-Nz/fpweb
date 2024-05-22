@@ -20,3 +20,11 @@ header {
 .link:hover {
   color: darkblue;
 }
+
+@media screen and (max-width: 600px) {
+  #root {
+    width: 100%;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
