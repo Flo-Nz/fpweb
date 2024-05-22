@@ -1,5 +1,6 @@
 {
   "fr": {
+    "BgCard.DiscordRating": "Noté par {totalUsers, plural, =0 {Non noté} one {# utilisateur} other {# utilisateurs}}",
     "BgCardUserSection.LoginButton": "Se connecter",
     "BgCardUserSection.Login": "pour noter les jeux",
     "BgCardUserSection.RateThisBg": "Noter ce jeu",

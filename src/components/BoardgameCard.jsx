@@ -72,11 +72,17 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
           </div>
           {discordRating && (
             <div className="w-full text-right text-sm">
-              Noté par {discordOrop.ratings.length} utilisateurs
+              <FormattedMessage
+                id="BgCard.DiscordRating"
+                values={{ totalUsers: discordOrop?.ratings?.length }}
+              />
             </div>
           )}
           {!discordRating && (
-            <div className="invisible text-sm">Aucune note</div>
+            <FormattedMessage
+              id="BgCard.DiscordRating"
+              values={{ totalUsers: 0 }}
+            />
           )}
         </div>
       </CardHeader>
