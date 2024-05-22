@@ -88,7 +88,11 @@ const BgCardUserSection = ({ boardgame, userInfos }) => {
           <Dropdown showArrow backdrop={!isMobile ? "blur" : "transparent"}>
             <DropdownTrigger>
               <Button endContent={<ChevronDown fill={"currentColor"} />}>
-                <Image src={`/${userRating}.webp`} width={35} />
+                {userRating ? (
+                  <Image src={`/${userRating}.webp`} width={35} />
+                ) : (
+                  <FormattedMessage id="BgCardUserSection.RateThisBg" />
+                )}
               </Button>
             </DropdownTrigger>
             <DropdownMenu
@@ -107,11 +111,7 @@ const BgCardUserSection = ({ boardgame, userInfos }) => {
                     id: `Ratings.${rating}`,
                   })}
                 >
-                  {userRating ? (
-                    <Image src={`/${rating}.webp`} width={25} />
-                  ) : (
-                    <FormattedMessage id="BgCardUserSection.RateThisBg" />
-                  )}
+                  <Image src={`/${rating}.webp`} width={25} />
                 </DropdownItem>
               ))}
             </DropdownMenu>
@@ -131,6 +131,17 @@ const BgCardUserSection = ({ boardgame, userInfos }) => {
             </Button>
           </div>
         )}
+      </div>
+      <div>
+        <Button
+          variant="light"
+          onPress={() => removeRating.mutate({ title: boardgame.title[0] })}
+          color="danger"
+          size="sm"
+          className={userRating ? "" : "invisible"}
+        >
+          <FormattedMessage id="BgCardUserSection.RemoveRating" />
+        </Button>
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ import { DiscordIcon, YoutubeIcon } from "./Icons";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useState } from "react";
 import BgCardUserSection from "./BgCardUserSection";
+import AskForOropButton from "./AskForOropButton";
 
 const BoardgameCard = ({ boardgame, userInfos }) => {
   const [displayEmbed, setDisplayEmbed] = useState(false);
@@ -83,14 +84,21 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
       <CardBody>
         <div className="flex flex-col m-auto min-h-64">
           {fpOrop?.youtubeUrl && !displayEmbed && (
-            <Button
-              color="danger"
-              startContent={<YoutubeIcon fill={"currentColor"} />}
-              onPress={() => setDisplayEmbed(true)}
-              className="cursor-pointer"
-            >
-              <FormattedMessage id="Orop.Watch" />
-            </Button>
+            <>
+              <Button
+                color="danger"
+                startContent={<YoutubeIcon fill={"currentColor"} />}
+                onPress={() => setDisplayEmbed(true)}
+                className="cursor-pointer"
+              >
+                <FormattedMessage id="Orop.Watch" />
+              </Button>
+              <AskForOropButton
+                className="mt-2 invisible"
+                boardgame={boardgame}
+                userInfos={userInfos}
+              />
+            </>
           )}
           {displayEmbed && <YoutubeEmbed youtubeUrl={fpOrop?.youtubeUrl} />}
           {!fpOrop?.youtubeUrl && (
@@ -104,6 +112,11 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
               >
                 <FormattedMessage id="Orop.Missing" />
               </Button>
+              <AskForOropButton
+                className="mt-2"
+                boardgame={boardgame}
+                userInfos={userInfos}
+              />
             </>
           )}
         </div>

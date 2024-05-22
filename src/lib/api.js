@@ -84,7 +84,7 @@ export const postUserRating = async (title, rating) => {
   return data;
 };
 
-export const removeUserRating = async (title, rating) => {
+export const removeUserRating = async (title) => {
   const apikey = await getApiKey();
   const params = { title };
 
@@ -93,6 +93,20 @@ export const removeUserRating = async (title, rating) => {
     method: "put",
     baseURL: process.env.API_BASE_URL,
     url: "/discordorop/ratings/remove",
+    params,
+  });
+  return data;
+};
+
+export const postAskForOrop = async (title) => {
+  const apikey = await getApiKey();
+  const params = { title };
+
+  const { data } = await axios({
+    headers: { apikey },
+    method: "post",
+    baseURL: process.env.API_BASE_URL,
+    url: "/orop/ask",
     params,
   });
   return data;
