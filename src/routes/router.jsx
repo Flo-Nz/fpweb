@@ -4,6 +4,7 @@ import ErrorPage from "../pages/Error";
 import Legal from "../pages/Legal";
 import SearchBoardgames from "../pages/SearchBoardgames";
 import MyRatings from "../pages/MyRatings";
+import TopAskedOrop from "../pages/TopAskedOrop";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
         element: <Navigate to={"/boardgames/search"} />,
       },
       { path: "/boardgames/search", element: <SearchBoardgames /> },
+      { path: "/boardgames/top/asked", element: <TopAskedOrop /> },
       { path: "/my-account/ratings", element: <MyRatings /> },
       {
         path: "/legal",

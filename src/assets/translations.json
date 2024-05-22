@@ -6,6 +6,7 @@
     "BgCardUserSection.RateThisBg": "Noter ce jeu",
     "BgCardUserSection.RemoveRating": "Supprimer ma note",
     "Boardgame.AlternateTitles": "Titres alternatifs",
+    "Common.AskStatus": "Voter",
     "Common.Orops": "On rejoue ou pas",
     "Common.Results": "Résultats",
     "Common.SearchCount": "{searchCount, plural, =0 {aucune interaction} one {# seule interaction} other {# interactions}} pour ce jeu (Discord et/ou Web)",
@@ -13,7 +14,8 @@
     "Common.Unconnected": "Non connecté",
     "Cookies.Accept": "Accepter",
     "Cookies.Decline": "Décliner",
-    "Error.IsError": "Nous n'avons pas réussi à récupérer vos informations. Êtes-vous bien connecté à votre compte ?",
+    "Cookies.Text": "Ce site web utilise les cookies pour stocker vos informations de connexion",
+    "Error.IsError": "Nous avons détecté un problème dans la récupération des informations demandées. Revenez plus tard.",
     "Error.NeedLogin": "Vous devez être connecté pour voir ce contenu",
     "Error.NeedLogin.Orop.Ask": "Vous devez être connecté pour faire travailler Yoel !",
     "Footer.Legal": "Legal",
@@ -32,6 +34,8 @@
     "Nav.PrixLudique": "Prix Ludique",
     "Nav.Search": "Rechercher un jeu",
     "Nav.Search.Description": "Dans toute notre BDD",
+    "Nav.Top.Asked": "Top OROP demandés",
+    "Nav.Top.Asked.Description": "Le classement des demandes d'OROP",
     "Orop.Ask": "Demander un OROP",
     "Orop.Ask.Already": "OROP déjà demandé",
     "Orop.Missing": "Pas d'épisode!",
@@ -44,8 +48,11 @@
     "Ratings.NoRating": "Non noté",
     "SearchBg.ResultsCount": "{resultsCount, plural, =0 {Aucun résultat} one {Un résultat} other {# résultats}}",
     "SearchBg.ResultsLimit": "Maximum de 24 résultats atteint - veuillez affiner votre recherche",
+    "SearchBg.StartToType": "Tapez le nom d'un jeu dans la barre de recherche pour retrouver ses informations ici !",
     "SearchBg.Subtitle": "Dans la base de données",
-    "SearchBg.Title": "RECHERCHER UN JEU"
+    "SearchBg.Title": "RECHERCHER UN JEU",
+    "TopAskedOrop.Count": "Nombre de demandes",
+    "TopAskedOrop.Subtitle": "Influe sur l'influenceur en votant pour un jeu à traiter dans un épisode d'On Rejoue Ou Pas !"
   },
   "en": {}
 }

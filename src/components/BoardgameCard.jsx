@@ -6,6 +6,7 @@ import {
   CardHeader,
   Divider,
   Image,
+  button,
 } from "@nextui-org/react";
 import { capitalize, upperCase } from "lodash";
 import YoutubeEmbed from "./YoutubeEmbed";
@@ -79,10 +80,12 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
             </div>
           )}
           {!discordRating && (
-            <FormattedMessage
-              id="BgCard.DiscordRating"
-              values={{ totalUsers: 0 }}
-            />
+            <div className="w-full text-right text-sm invisible">
+              <FormattedMessage
+                id="BgCard.DiscordRating"
+                values={{ totalUsers: 0 }}
+              />
+            </div>
           )}
         </div>
       </CardHeader>
@@ -100,7 +103,7 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
                 <FormattedMessage id="Orop.Watch" />
               </Button>
               <AskForOropButton
-                className="mt-2 invisible"
+                classNames={{ button: "mt-2 invisible" }}
                 boardgame={boardgame}
                 userInfos={userInfos}
               />
@@ -119,7 +122,7 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
                 <FormattedMessage id="Orop.Missing" />
               </Button>
               <AskForOropButton
-                className="mt-2"
+                classNames={{ button: "mt-2" }}
                 boardgame={boardgame}
                 userInfos={userInfos}
               />

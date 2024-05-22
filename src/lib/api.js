@@ -111,3 +111,14 @@ export const postAskForOrop = async (title) => {
   });
   return data;
 };
+
+export const getTopAskedOrop = async () => {
+  const apikey = await getApiKey();
+  const { data } = await axios({
+    headers: { apikey },
+    method: "get",
+    baseURL: process.env.API_BASE_URL,
+    url: "/orop/top/asked",
+  });
+  return data;
+};

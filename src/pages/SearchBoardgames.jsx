@@ -25,7 +25,7 @@ const SearchBoardgames = () => {
   });
 
   return (
-    <div id="intro">
+    <div id="searchingBoardGame">
       <Card
         isBlurred
         className="border-none max-w-[100%] mb-2 mt-6 bg-neutral-200"
@@ -75,14 +75,18 @@ const SearchBoardgames = () => {
               <FormattedMessage id="Common.Results" />
             </h2>
             <h3 className="mt-1">
-              <FormattedMessage
-                id={
-                  boardgames?.length === 24
-                    ? "SearchBg.ResultsLimit"
-                    : "SearchBg.ResultsCount"
-                }
-                values={{ resultsCount: boardgames?.length }}
-              />
+              {!inputValue ? (
+                <FormattedMessage id="SearchBg.StartToType" />
+              ) : (
+                <FormattedMessage
+                  id={
+                    boardgames?.length === 24
+                      ? "SearchBg.ResultsLimit"
+                      : "SearchBg.ResultsCount"
+                  }
+                  values={{ resultsCount: boardgames?.length }}
+                />
+              )}
             </h3>
             {isPending && (
               <div className="full-w">

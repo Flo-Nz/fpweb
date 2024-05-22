@@ -1,14 +1,23 @@
-import { Button } from "@nextui-org/react";
+import {
+  Button,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@nextui-org/react";
 import { includes } from "lodash";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postAskForOrop } from "../lib/api";
 import { useState } from "react";
 
-const AskForOropButton = ({ boardgame, userInfos, className }) => {
+const AskForOropButton = ({
+  boardgame,
+  userInfos,
+  classNames,
+  buttonVariant,
+}) => {
   const queryClient = useQueryClient();
   const [error, setError] = useState(null);
-  const intl = useIntl();
 
   const askForOrop = useMutation({
     mutationFn: ({ title }) => postAskForOrop(title),
@@ -16,15 +25,21 @@ const AskForOropButton = ({ boardgame, userInfos, className }) => {
       setError(null);
       queryClient.invalidateQueries({ queryKey: ["searchResults"] });
       queryClient.invalidateQueries({ queryKey: ["myRatings"] });
+      queryClient.invalidateQueries({ queryKey: ["topAskedOrop"] });
     },
     onError: (err) => setError(err),
   });
 
   if (!userInfos.isLogged) {
     return (
-      <Popover placement="top" showArrow={true} className={className}>
+      <Popover placement="top" showArrow={true} className={classNames?.popover}>
         <PopoverTrigger>
-          <Button variant="light" size="sm" color="success">
+          <Button
+            className={classNames?.button}
+            variant={buttonVariant || "light"}
+            size="sm"
+            color="success"
+          >
             <FormattedMessage id="Orop.Ask" />
           </Button>
         </PopoverTrigger>
@@ -37,13 +52,13 @@ const AskForOropButton = ({ boardgame, userInfos, className }) => {
 
   const { discordId } = userInfos;
 
-  if (includes(boardgame.askedBy, discordId)) {
+  if (includes(boardgame?.askedBy, discordId)) {
     return (
       <Button
-        variant="light"
+        variant={buttonVariant || "light"}
         size="sm"
         color="secondary"
-        className={className}
+        className={classNames?.button}
         isDisabled
       >
         <FormattedMessage id="Orop.Ask.Already" />
@@ -53,10 +68,10 @@ const AskForOropButton = ({ boardgame, userInfos, className }) => {
 
   return (
     <Button
-      variant="light"
+      variant={buttonVariant || "light"}
       size="sm"
       color="success"
-      className={className}
+      className={classNames?.button}
       onPress={() => askForOrop.mutate({ title: boardgame.title[0] })}
     >
       <FormattedMessage id="Orop.Ask" />

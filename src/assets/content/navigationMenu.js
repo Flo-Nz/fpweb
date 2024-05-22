@@ -15,6 +15,12 @@ export const mainNav = [
         path: "boardgames/search",
         description: "Nav.Search.Description",
       },
+      {
+        id: "orop-top-asked",
+        title: "Nav.Top.Asked",
+        path: "boardgames/top/asked",
+        description: "Nav.Top.Asked.Description",
+      },
     ],
   },
   {
