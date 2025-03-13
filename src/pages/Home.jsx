@@ -1,11 +1,10 @@
-import { Button, Card, CardBody, Image } from "@nextui-org/react";
+import { Button, Card, CardBody, Image } from "@heroui/react";
 import { PlusIcon } from "../components/Icons";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import parse from "html-react-parser";
-import { verifyJwt } from "../lib/jwt";
 
-const Home = ({ userInfos }) => {
+const Home = () => {
   const intl = useIntl();
 
   return (

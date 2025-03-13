@@ -6,15 +6,15 @@ import {
   CardHeader,
   Divider,
   Image,
-  button,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { capitalize, upperCase } from "lodash";
 import YoutubeEmbed from "./YoutubeEmbed";
-import { DiscordIcon, YoutubeIcon } from "./Icons";
+import { CartIcon, DiscordIcon, YoutubeIcon } from "./Icons";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useState } from "react";
 import BgCardUserSection from "./BgCardUserSection";
 import AskForOropButton from "./AskForOropButton";
+import { Link } from "react-router-dom";
 
 const BoardgameCard = ({ boardgame, userInfos }) => {
   const [displayEmbed, setDisplayEmbed] = useState(false);
@@ -91,9 +91,9 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
       </CardHeader>
       <Divider />
       <CardBody>
-        <div className="flex flex-col m-auto min-h-64">
+        <div className="flex m-auto min-h-64 my-auto items-center">
           {fpOrop?.youtubeUrl && !displayEmbed && (
-            <>
+            <div className="flex flex-col">
               <Button
                 color="danger"
                 startContent={<YoutubeIcon fill={"currentColor"} />}
@@ -107,11 +107,11 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
                 boardgame={boardgame}
                 userInfos={userInfos}
               />
-            </>
+            </div>
           )}
           {displayEmbed && <YoutubeEmbed youtubeUrl={fpOrop?.youtubeUrl} />}
           {!fpOrop?.youtubeUrl && (
-            <>
+            <div className="flex flex-col">
               <Button
                 startContent={<YoutubeIcon fill={"currentColor"} />}
                 disabled
@@ -126,7 +126,7 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
                 boardgame={boardgame}
                 userInfos={userInfos}
               />
-            </>
+            </div>
           )}
         </div>
         <Divider className="mt-6" />
@@ -153,6 +153,18 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
           <FormattedMessage id="Common.SearchCount" values={{ searchCount }} />
         </div>
       </CardBody>
+      <CardFooter>
+        <Link
+          to={`https://www.ludum.fr/rechercher?s=${encodeURI(
+            boardgame.title[0]
+          )}&aff=84`}
+          target="blank"
+        >
+          <Button className="hover:bg-red-600 hover:text-white" size="sm">
+            <CartIcon /> Achetez sur Ludum.fr
+          </Button>
+        </Link>
+      </CardFooter>
     </Card>
   );
 };

@@ -7,7 +7,7 @@ import {
   Image,
   Link,
   Spinner,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { capitalize, find } from "lodash";
 import { FormattedMessage, useIntl } from "react-intl";
 import { CheckIcon, ChevronDown, DiscordIcon } from "./Icons";
@@ -15,14 +15,16 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postUserRating, removeUserRating } from "../lib/api";
 import { useState } from "react";
 import useScreenMobile from "../hooks/useScreenMobile";
+import DiscordLoginButton from "./DiscordLoginButton";
+import GoogleLoginButton from "./GoogleLoginButton";
 
-const getUserRating = (boardgame, discordId) => {
-  if (!discordId) {
+const getUserRating = (boardgame, userId) => {
+  if (!userId) {
     return null;
   }
   const userRating = find(
     boardgame.discordOrop?.ratings,
-    (elem) => elem.userId === discordId
+    (elem) => elem.userId === userId
   );
   return userRating?.rating;
 };
@@ -60,15 +62,10 @@ const BgCardUserSection = ({ boardgame, userInfos }) => {
           <FormattedMessage id="Common.Unconnected" />
         </h1>
         <div className="flex flew-row items-center mt-4">
-          <Link href={process.env.DISCORD_OAUTH_URL}>
-            <Button
-              size="sm"
-              startContent={<DiscordIcon fill="white" />}
-              className="bg-indigo-500 text-primary"
-            >
-              <FormattedMessage id="BgCardUserSection.LoginButton" />
-            </Button>
-          </Link>
+          <div className="flex flex-col gap-2 mr-8">
+            <DiscordLoginButton size={"1.5em"} />
+            <GoogleLoginButton size={"1.5em"} />
+          </div>
           <div className="ml-2">
             <FormattedMessage id="BgCardUserSection.Login" />
           </div>
@@ -76,8 +73,8 @@ const BgCardUserSection = ({ boardgame, userInfos }) => {
       </div>
     );
   }
-  const { username, discordId } = userInfos;
-  const userRating = getUserRating(boardgame, discordId);
+  const { username, userId } = userInfos;
+  const userRating = getUserRating(boardgame, userId);
   const isMobile = useScreenMobile();
 
   return (
@@ -99,7 +96,7 @@ const BgCardUserSection = ({ boardgame, userInfos }) => {
               onAction={(rating) =>
                 updateRating.mutate({
                   title: boardgame.title[0],
-                  userId: discordId,
+                  userId,
                   rating,
                 })
               }

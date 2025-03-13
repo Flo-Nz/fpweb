@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getItem, setItem } from "localforage";
 import { deburr } from "lodash";
-import { getUserDiscordId, getUserId } from "./user";
+import { getUserId } from "./user";
 
 export const getApiKey = async () => {
   try {
@@ -26,13 +26,23 @@ export const fetchUserInfos = async () => {
       headers: { apikey },
     });
     if (user?.data) {
-      const { _id, username, discord } = user.data;
+      const { _id, username, type, discord, google } = user.data;
       await setItem("id", _id.toString());
-      await setItem("username", username);
-      await setItem("discordRoles", discord.roles);
-      await setItem("discordId", discord.id);
+      switch (type) {
+        case "discord":
+          await setItem("username", username);
+          await setItem("discordRoles", discord.roles);
+          await setItem("userId", discord.id);
+          return;
+        case "google":
+          await setItem("username", username);
+          await setItem("discordRoles", []);
+          await setItem("userId", google.id);
+          return;
+        default:
+          return;
+      }
     }
-    return;
   } catch (error) {
     console.log("[fetchUserInfos] error ", error);
   }

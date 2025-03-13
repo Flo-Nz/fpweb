@@ -1,27 +1,37 @@
-import { Card, CardBody, Input, Spinner } from "@nextui-org/react";
+import { Card, CardBody, Input, Spinner } from "@heroui/react";
 import { SearchIcon } from "../components/Icons";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useUserInfos } from "../App";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { searchOrop } from "../lib/api";
 import { useQuery } from "@tanstack/react-query";
 import BoardgameCard from "../components/BoardgameCard";
+import { debounce } from "lodash";
 
 const SearchBoardgames = () => {
   const intl = useIntl();
   const { userInfos } = useUserInfos();
   const [inputValue, setInputValue] = useState("");
-  const [activePage, setActivePage] = useState(1);
+  const [debouncedValue, setDebouncedValue] = useState(inputValue);
+
+  const debouncedQuery = useMemo(
+    () => debounce((value) => setDebouncedValue(value), 300),
+    []
+  );
+
+  useEffect(() => {
+    debouncedQuery(inputValue);
+  }, [inputValue, debouncedQuery]);
 
   const {
-    isPending,
+    isLoading,
     isError,
     data: boardgames = [],
   } = useQuery({
-    queryKey: ["searchResults", inputValue],
+    queryKey: ["searchResults", debouncedValue],
     queryFn: searchOrop,
     refetchOnWindowFocus: false,
-    enabled: !!inputValue,
+    enabled: !!debouncedValue && debouncedValue.length > 2,
   });
 
   return (
@@ -42,32 +52,19 @@ const SearchBoardgames = () => {
               </i>
             </p>
           </div>
-          <div className="mt-8 full-w">
+          <div className="mt-8 w-2/5">
             <Input
-              variant="flat"
-              classNames={{
-                input: [
-                  "text-primary",
-                  "text-xl",
-                  "group-data-[hover=true]:text-zinc-700",
-                ],
-                innerWrapper: [
-                  "bg-transparent",
-                  "text-primary",
-                  "group-data-[hover=true]:text-zinc-700",
-                ],
-                inputWrapper: [
-                  "bg-zinc-700",
-                  "text-primary",
-                  "group-data-[hover=true]:bg-zinc-400",
-                  "group-data-[hover=true]:text-zinc-700",
-                  "group-data-[focus=true]:bg-zinc-600",
-                ],
-              }}
-              startContent={<SearchIcon />}
-              label={intl.formatMessage({ id: "Common.Title" })}
+              isClearable
+              variant="faded"
+              color="warning"
+              size="lg"
               value={inputValue}
               onValueChange={setInputValue}
+              radius="lg"
+              label={intl.formatMessage({ id: "SearchBg.InputLabel" })}
+              startContent={
+                <SearchIcon className="text-black mb-0.5 text-slate-400 pointer-events-none flex-shrink-0" />
+              }
             />
           </div>
           <div className="mt-8">
@@ -88,13 +85,14 @@ const SearchBoardgames = () => {
                 />
               )}
             </h3>
-            {isPending && (
+            {isLoading && (
               <div className="full-w">
                 <Spinner color="black" />
               </div>
             )}
             <div className="grid grid-cols-1 gap-4 mt-4 lg:grid-cols-3 lg:gap-4">
-              {boardgames.length > 0 &&
+              {Array.isArray(boardgames) &&
+                boardgames.length > 0 &&
                 boardgames.map((bg) => (
                   <BoardgameCard
                     key={bg._id?.toString()}

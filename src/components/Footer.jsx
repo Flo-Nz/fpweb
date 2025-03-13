@@ -4,7 +4,7 @@ import {
   Navbar,
   NavbarContent,
   NavbarItem,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { FormattedMessage } from "react-intl";
 import { footer } from "../assets/content/footer";
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from "./Icons";

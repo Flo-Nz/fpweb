@@ -1,11 +1,11 @@
-import { Button, Link } from "@nextui-org/react";
+import { Button, Link } from "@heroui/react";
 import { DiscordIcon } from "./Icons";
 import { FormattedMessage } from "react-intl";
 
-const DiscordLoginButton = () => (
+const DiscordLoginButton = ({ size }) => (
   <Link href={process.env.DISCORD_OAUTH_URL}>
     <Button
-      startContent={<DiscordIcon fill="white" />}
+      startContent={<DiscordIcon fill="white" size={size} />}
       className="bg-indigo-500 text-primary"
     >
       <FormattedMessage id="Nav.DiscordLogin" />

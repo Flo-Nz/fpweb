@@ -8,7 +8,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useUserInfos } from "../App";
 import { getTopAskedOrop } from "../lib/api";
