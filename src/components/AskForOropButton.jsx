@@ -3,7 +3,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { includes } from "lodash";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -50,9 +50,9 @@ const AskForOropButton = ({
     );
   }
 
-  const { discordId } = userInfos;
+  const { userId } = userInfos;
 
-  if (includes(boardgame?.askedBy, discordId)) {
+  if (includes(boardgame?.askedBy, userId)) {
     return (
       <Button
         variant={buttonVariant || "light"}

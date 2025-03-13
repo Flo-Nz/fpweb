@@ -13,7 +13,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   ChevronDown,
@@ -27,6 +27,8 @@ import { mainNav } from "../assets/content/navigationMenu";
 import { useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { logoutUser } from "../lib/user";
+import GoogleLoginButton from "./GoogleLoginButton";
+import DiscordLoginButton from "./DiscordLoginButton";
 
 const icons = {
   chevron: <ChevronDown fill="currentColor" size={16} />,
@@ -209,22 +211,19 @@ const NavBar = ({ userInfos }) => {
             </>
           ))}
           {!isLogged && (
-            <NavbarMenuItem key="login-discord" className="mr-4">
-              <Link href={process.env.DISCORD_OAUTH_URL}>
-                <Button
-                  startContent={<DiscordIcon fill="white" />}
-                  className="bg-indigo-500 text-primary"
-                >
-                  <FormattedMessage id="Nav.DiscordLogin" />
-                </Button>
-              </Link>
-            </NavbarMenuItem>
+            <>
+              <NavbarMenuItem key="login-discord" className="mr-4">
+                <DiscordLoginButton size={"2em"} />
+              </NavbarMenuItem>
+              <NavbarMenuItem key="login-google" className="mr-4">
+                <GoogleLoginButton size={"2em"} />
+              </NavbarMenuItem>
+            </>
           )}
           {isLogged && (
             <NavbarItem key="logout-discord" className="mr-4">
               <Link href="/">
                 <Button
-                  startContent={<DiscordIcon fill="currentColor" />}
                   className="border-solid border-2 bg-slate-200 border-indigo-500 text-indigo-500 font-semibold"
                   onPress={() => {
                     logoutUser();
@@ -270,17 +269,20 @@ const NavBar = ({ userInfos }) => {
             </>
           ))}
           {!isLogged && (
-            <NavbarMenuItem key="login-discord" className="mr-4">
-              <Link href={process.env.DISCORD_OAUTH_URL}>
-                <FormattedMessage id="Nav.DiscordLogin" />
-              </Link>
-            </NavbarMenuItem>
+            <>
+              <NavbarMenuItem key="login-discord" className="mr-4">
+                <DiscordLoginButton size={"1.5em"} />
+              </NavbarMenuItem>
+              <NavbarMenuItem key="login-google" className="mr-4">
+                <GoogleLoginButton size={"1.5em"} />
+              </NavbarMenuItem>
+            </>
           )}
           {isLogged && (
             <NavbarMenuItem key="logout-discord" className="mr-4">
               <Link
                 href="/"
-                onClick={(event) => {
+                onPress={(event) => {
                   logoutUser();
                 }}
               >

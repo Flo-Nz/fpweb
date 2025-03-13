@@ -5,16 +5,17 @@ import {
   Input,
   Pagination,
   Spinner,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { SearchIcon } from "../components/Icons";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useUserInfos } from "../App";
 import { useEffect, useState } from "react";
 import { userRatings } from "../lib/api";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import BoardgameCard from "../components/BoardgameCard";
 import { filter, includes, isArray } from "lodash";
 import DiscordLoginButton from "../components/DiscordLoginButton";
+import GoogleLoginButton from "../components/GoogleLoginButton";
 
 const MyRatings = () => {
   const intl = useIntl();
@@ -32,6 +33,7 @@ const MyRatings = () => {
     queryFn: userRatings,
     refetchOnWindowFocus: false,
     enabled: userInfos?.isLogged,
+    placeholderData: keepPreviousData,
   });
 
   const updateBoardgames = (bgs, page) => {
@@ -87,7 +89,10 @@ const MyRatings = () => {
           <div className="mb-8">
             <FormattedMessage id="Error.NeedLogin" />
           </div>
-          <DiscordLoginButton />
+          <div className="flex flex-col gap-4">
+            <DiscordLoginButton />
+            <GoogleLoginButton />
+          </div>
         </CardBody>
       </Card>
     );
@@ -187,6 +192,18 @@ const MyRatings = () => {
                   />
                 ))}
             </div>
+            {filteredBoardgames?.length > 12 && (
+              <div className="mt-4">
+                <Pagination
+                  total={getTotalPages(filteredBoardgames?.length ?? 0)}
+                  color="danger"
+                  page={currentPage}
+                  onChange={(page) =>
+                    updateBoardgames(filteredBoardgames, page)
+                  }
+                />
+              </div>
+            )}
           </div>
         </CardBody>
       </Card>

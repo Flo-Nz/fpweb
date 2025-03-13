@@ -1,7 +1,6 @@
 import {
   Outlet,
   useLocation,
-  useNavigate,
   useOutletContext,
   useSearchParams,
 } from "react-router-dom";
@@ -17,21 +16,20 @@ import { getUserApiKey, getUserInfos, isUserLogged } from "./lib/user";
 import { verifyJwt } from "./lib/jwt";
 import { fetchUserInfos } from "./lib/api";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const intl = useIntl();
   const [userInfos, setUserInfos] = useState({
     isLogged: false,
-    discordId: null,
+    userId: null,
     discordRoles: [],
     apikey: null,
   });
   const [searchParams, setSearchParams] = useSearchParams();
-  const { pathname } = location;
   const userJwt = searchParams.get("jwt");
 
   useEffect(() => {
@@ -53,31 +51,33 @@ const App = () => {
   }, [userInfos.isLogged]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <NavBar userInfos={userInfos} />
-      <Layout>
-        {location?.pathname === "/" ? (
-          <Home userInfos={userInfos} />
-        ) : (
-          <Outlet context={{ userInfos }} />
-        )}
-      </Layout>
-      <Footer />
-      <CookieConsent
-        location="bottom"
-        buttonText={intl.formatMessage({ id: "Cookies.Accept" })}
-        declineButtonText={intl.formatMessage({ id: "Cookies.Decline" })}
-        style={{ background: "#2B373B" }}
-        buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
-        declineButtonStyle={{ fontSize: "13px" }}
-        expires={150}
-        cookieName="CookieConsent"
-        visible={"byCookieValue"}
-        enableDeclineButton
-      >
-        <FormattedMessage id="Cookies.Text" />
-      </CookieConsent>
-    </QueryClientProvider>
+    <GoogleOAuthProvider clientId={process.env.GOOGLE_OAUTH_ID_CLIENT}>
+      <QueryClientProvider client={queryClient}>
+        <NavBar userInfos={userInfos} />
+        <Layout>
+          {location?.pathname === "/" ? (
+            <Home userInfos={userInfos} />
+          ) : (
+            <Outlet context={{ userInfos }} />
+          )}
+        </Layout>
+        <Footer />
+        <CookieConsent
+          location="bottom"
+          buttonText={intl.formatMessage({ id: "Cookies.Accept" })}
+          declineButtonText={intl.formatMessage({ id: "Cookies.Decline" })}
+          style={{ background: "#2B373B" }}
+          buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
+          declineButtonStyle={{ fontSize: "13px" }}
+          expires={150}
+          cookieName="CookieConsent"
+          visible={"byCookieValue"}
+          enableDeclineButton
+        >
+          <FormattedMessage id="Cookies.Text" />
+        </CookieConsent>
+      </QueryClientProvider>
+    </GoogleOAuthProvider>
   );
 };
 

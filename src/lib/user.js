@@ -8,11 +8,11 @@ export const isUserLogged = async () => {
   return false;
 };
 
-export const getUserId = async () => getItem("id");
+export const getId = async () => getItem("id");
 
 export const getUserDiscordRoles = async () => getItem("discordRoles");
 
-export const getUserDiscordId = async () => getItem("discordId");
+export const getUserId = async () => getItem("userId");
 
 export const getUserApiKey = async () => getItem("apikey");
 
@@ -25,10 +25,10 @@ export const logoutUser = async () =>
 
 export const getUserInfos = async () => {
   const isLogged = await isUserLogged();
-  const discordId = await getUserDiscordId();
+  const userId = await getUserId();
   const discordRoles = await getUserDiscordRoles();
   const apikey = await getUserApiKey();
-  const userId = await getUserId();
+  const id = await getId();
   const username = await getUsername();
-  return { isLogged, discordId, discordRoles, apikey, userId, username };
+  return { isLogged, userId, discordRoles, apikey, id, username };
 };

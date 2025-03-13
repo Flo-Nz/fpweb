@@ -18,6 +18,9 @@ export default defineConfig(({ mode }) => {
       ),
       "process.env.API_KEY": JSON.stringify(env.VITE_FP_API_KEY),
       "process.env.YOEL_API_KEY": JSON.stringify(env.VITE_YOEL_API_KEY),
+      "process.env.GOOGLE_OAUTH_ID_CLIENT": JSON.stringify(
+        env.VITE_GOOGLE_OAUTH_ID_CLIENT
+      ),
     },
     plugins: [svgr(), react()],
   };
