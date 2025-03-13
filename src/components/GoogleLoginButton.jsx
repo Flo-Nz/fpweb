@@ -10,9 +10,12 @@ const GoogleLoginButton = ({ size }) => {
   const googleLogin = useGoogleLogin({
     flow: "auth-code",
     onSuccess: async (codeResponse) => {
-      const response = await axios.post("http://localhost:3000/google/login", {
-        code: codeResponse.code,
-      });
+      const response = await axios.post(
+        `${process.env.API_BASE_URL}/google/login`,
+        {
+          code: codeResponse.code,
+        }
+      );
       if (response?.data) {
         navigate(`/?jwt=${response.data.jwt}`);
         window.location.reload();
