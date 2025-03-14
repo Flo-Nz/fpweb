@@ -52,7 +52,7 @@ const SearchBoardgames = () => {
               </i>
             </p>
           </div>
-          <div className="mt-8 w-2/5">
+          <div className="mt-8 w-full lg:w-2/5">
             <Input
               isClearable
               variant="faded"
