@@ -37,7 +37,7 @@ const Home = () => {
               ta propre notation ou demander à Yoël de traiter un jeu spécifique
               ? Tout est possible ici !
             </h2>
-            <div className="m-auto w-3/4 grid auto-rows-fr gap-4 mt-8 mb-8">
+            <div className="m-auto lg:w-3/4 grid auto-rows-fr gap-4 mt-8 mb-8">
               <Button
                 className="h-fit bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg"
                 onPress={() => delay(navigate, 300, "/boardgames/search")}
