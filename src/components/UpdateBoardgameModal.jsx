@@ -8,9 +8,9 @@ import {
   ModalHeader,
 } from "@heroui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { postAskForOrop, updateBoardgame } from "../lib/api";
+import { updateBoardgame } from "../lib/api";
 import { useState } from "react";
-import { AddIcon, DbIcon, TrashIcon } from "./Icons";
+import { AddIcon, TrashIcon } from "./Icons";
 import { FormattedMessage, useIntl } from "react-intl";
 import { filter } from "lodash";
 

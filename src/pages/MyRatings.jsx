@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Input,
-  Pagination,
-  Spinner,
-} from "@heroui/react";
+import { Card, CardBody, Input, Pagination, Spinner } from "@heroui/react";
 import { DbIcon } from "../components/Icons";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useUserInfos } from "../App";

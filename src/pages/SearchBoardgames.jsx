@@ -1,5 +1,5 @@
 import { Card, CardBody, Input, Spinner } from "@heroui/react";
-import { DbIcon, SearchIcon } from "../components/Icons";
+import { DbIcon } from "../components/Icons";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useUserInfos } from "../App";
 import { useEffect, useMemo, useState } from "react";
