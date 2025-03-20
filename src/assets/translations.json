@@ -1,5 +1,7 @@
 {
   "fr": {
+    "BgCard.Edit": "Editer cette fiche",
+    "BgCard.Ludum": "Achetez sur Ludum.fr",
     "BgCard.DiscordRating": "Noté par {totalUsers, plural, =0 {Non noté} one {# utilisateur} other {# utilisateurs}}",
     "BgCardUserSection.LoginButton": "Se connecter",
     "BgCardUserSection.Login": "pour noter les jeux",
@@ -11,6 +13,8 @@
     "Common.Results": "Résultats",
     "Common.SearchCount": "{searchCount, plural, =0 {aucune interaction} one {# seule interaction} other {# interactions}} pour ce jeu (Discord et/ou Web)",
     "Common.Title": "Titre",
+    "Common.Title.Alternate": "Titre alternatif {index}",
+    "Common.Title.First": "Titre principal",
     "Common.Unconnected": "Non connecté",
     "Cookies.Accept": "Accepter",
     "Cookies.Decline": "Décliner",
@@ -58,7 +62,9 @@
     "SearchBg.Subtitle": "Dans la base de données",
     "SearchBg.Title": "RECHERCHER UN JEU",
     "TopAskedOrop.Count": "Nombre de demandes",
-    "TopAskedOrop.Subtitle": "Influe sur l'influenceur en votant pour un jeu à traiter dans un épisode d'On Rejoue Ou Pas !"
+    "TopAskedOrop.Subtitle": "Influe sur l'influenceur en votant pour un jeu à traiter dans un épisode d'On Rejoue Ou Pas !",
+    "UpdateBoardgameModal.NewTitlePlaceholder": "Titre du jeu...",
+    "UpdateBoardgameModal.Title": "Edition de {title}"
   },
   "en": {}
 }

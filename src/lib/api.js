@@ -132,3 +132,20 @@ export const getTopAskedOrop = async () => {
   });
   return data;
 };
+
+export const updateBoardgame = async (id, payload) => {
+  try {
+    const apikey = await getApiKey();
+    const { data } = await axios({
+      headers: { apikey },
+      method: "put",
+      baseURL: process.env.API_BASE_URL,
+      url: `/boardgame/${id}`,
+      data: payload,
+    });
+
+    return data;
+  } catch (error) {
+    return error.message;
+  }
+};

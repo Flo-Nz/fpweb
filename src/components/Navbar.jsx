@@ -16,7 +16,7 @@ import {
 } from "@heroui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  ChevronDown,
+  ChevronDownIcon,
   DiscordIcon,
   DiscordOutlineIcon,
   FacebookIcon,
@@ -31,7 +31,7 @@ import GoogleLoginButton from "./GoogleLoginButton";
 import DiscordLoginButton from "./DiscordLoginButton";
 
 const icons = {
-  chevron: <ChevronDown fill="currentColor" size={16} />,
+  chevron: <ChevronDownIcon size={16} />,
 };
 
 const NavBar = ({ userInfos }) => {
@@ -82,11 +82,11 @@ const NavBar = ({ userInfos }) => {
                     target="_blank"
                   >
                     <Button
-                      color="primary"
                       isIconOnly
-                      className="font-color-white"
+                      variant="bordered"
+                      className="border-transparent"
                     >
-                      <FacebookIcon fill="black" size={32} />
+                      <FacebookIcon />
                     </Button>
                   </Link>
                   <Link
@@ -95,11 +95,11 @@ const NavBar = ({ userInfos }) => {
                     className="ml-2"
                   >
                     <Button
-                      color="primary"
                       isIconOnly
-                      className="font-color-white"
+                      variant="bordered"
+                      className="border-transparent"
                     >
-                      <InstagramIcon fill="black" size={32} />
+                      <InstagramIcon />
                     </Button>
                   </Link>
                   <Link
@@ -108,11 +108,11 @@ const NavBar = ({ userInfos }) => {
                     className="ml-2"
                   >
                     <Button
-                      color="primary"
                       isIconOnly
-                      className="font-color-white"
+                      variant="bordered"
+                      className="border-transparent"
                     >
-                      <YoutubeIcon fill="black" size={32} />
+                      <YoutubeIcon />
                     </Button>
                   </Link>
                   <Link
@@ -121,11 +121,11 @@ const NavBar = ({ userInfos }) => {
                     className="ml-2"
                   >
                     <Button
-                      color="primary"
                       isIconOnly
-                      className="font-color-white"
+                      variant="bordered"
+                      className="border-transparent"
                     >
-                      <DiscordOutlineIcon fill="black" size={32} />
+                      <DiscordIcon />
                     </Button>
                   </Link>
                 </div>
@@ -140,7 +140,7 @@ const NavBar = ({ userInfos }) => {
           className="hidden lg:flex"
         >
           {mainNav.map((nav) => (
-            <>
+            <div key={nav.id}>
               {nav.elements ? (
                 <Dropdown key={nav.id}>
                   <NavbarItem
@@ -151,12 +151,9 @@ const NavBar = ({ userInfos }) => {
                     <DropdownTrigger key={nav.id}>
                       <Button
                         disableRipple
-                        className={`text-lg p-0 bg-transparent data-[hover=true]:bg-transparent text-primary ${
-                          currentLocation === nav.id ? "font-semibold" : ""
-                        }`}
+                        className={`text-lg font-semibold`}
                         endContent={icons.chevron}
-                        radius="sm"
-                        variant="light"
+                        radius="lg"
                         key={nav.id}
                       >
                         <FormattedMessage id={nav.title} key={nav.title} />
@@ -208,7 +205,7 @@ const NavBar = ({ userInfos }) => {
                   )}
                 </>
               )}
-            </>
+            </div>
           ))}
           {!isLogged && (
             <>
@@ -237,7 +234,7 @@ const NavBar = ({ userInfos }) => {
         </NavbarContent>
         <NavbarMenu className="pt-8">
           {mainNav.map((nav, index) => (
-            <>
+            <div key={nav.id}>
               {nav.elements ? (
                 <>
                   {nav.elements.map((elem) => (
@@ -266,7 +263,7 @@ const NavBar = ({ userInfos }) => {
                   </Link>
                 </NavbarMenuItem>
               )}
-            </>
+            </div>
           ))}
           {!isLogged && (
             <>

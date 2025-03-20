@@ -5,12 +5,10 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Image,
-  Link,
-  Spinner,
 } from "@heroui/react";
 import { capitalize, find } from "lodash";
 import { FormattedMessage, useIntl } from "react-intl";
-import { CheckIcon, ChevronDown, DiscordIcon } from "./Icons";
+import { CheckIcon, ChevronDownIcon } from "./Icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postUserRating, removeUserRating } from "../lib/api";
 import { useState } from "react";
@@ -84,7 +82,7 @@ const BgCardUserSection = ({ boardgame, userInfos }) => {
         <div>
           <Dropdown showArrow backdrop={!isMobile ? "blur" : "transparent"}>
             <DropdownTrigger>
-              <Button endContent={<ChevronDown fill={"currentColor"} />}>
+              <Button endContent={<ChevronDownIcon size="1.5em" />}>
                 {userRating ? (
                   <Image src={`/${userRating}.webp`} width={35} />
                 ) : (

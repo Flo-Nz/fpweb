@@ -21,6 +21,9 @@ export default defineConfig(({ mode }) => {
       "process.env.GOOGLE_OAUTH_ID_CLIENT": JSON.stringify(
         env.VITE_GOOGLE_OAUTH_ID_CLIENT
       ),
+      "process.env.AUTHORIZED_SCRIBES": JSON.stringify(
+        env.VITE_AUTHORIZED_SCRIBES
+      ),
     },
     plugins: [svgr(), react()],
   };
