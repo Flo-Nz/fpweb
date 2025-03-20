@@ -292,36 +292,28 @@ const NavBar = ({ userInfos }) => {
       <div className="lg:hidden">
         <div className="flex flex-row justify-center lg:hidden">
           <Link href="https://www.facebook.com/FirstPlayerFR/" target="_blank">
-            <Button color="primary" isIconOnly className="font-color-white">
-              <FacebookIcon fill="black" size={32} />
-            </Button>
+            <FacebookIcon fill="black" size={32} />
           </Link>
           <Link
             href="https://www.instagram.com/firstplayerfr/"
             target="_blank"
             className="ml-1"
           >
-            <Button color="primary" isIconOnly className="font-color-white">
-              <InstagramIcon fill="black" size={32} />
-            </Button>
+            <InstagramIcon fill="black" size={32} />
           </Link>
           <Link
             href="https://www.youtube.com/@FirstPlayerFr"
             target="_blank"
             className="ml-1"
           >
-            <Button color="primary" isIconOnly className="font-color-white">
-              <YoutubeIcon fill="black" size={32} />
-            </Button>
+            <YoutubeIcon fill="black" size={32} />
           </Link>
           <Link
             href="https://discord.gg/numWSwhHkW"
             target="_blank"
             className="ml-1"
           >
-            <Button color="primary" isIconOnly className="font-color-white">
-              <DiscordOutlineIcon fill="black" size={32} />
-            </Button>
+            <DiscordIcon fill="black" size={32} />
           </Link>
         </div>
       </div>

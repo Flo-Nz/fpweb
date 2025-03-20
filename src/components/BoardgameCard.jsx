@@ -10,13 +10,7 @@ import {
 } from "@heroui/react";
 import { capitalize, toUpper, upperCase } from "lodash";
 import YoutubeEmbed from "./YoutubeEmbed";
-import {
-  CartIcon,
-  DiscordIcon,
-  EditIcon,
-  UsersIcon,
-  YoutubeIcon,
-} from "./Icons";
+import { CartIcon, EditIcon, UsersIcon, YoutubeIcon } from "./Icons";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useState } from "react";
 import BgCardUserSection from "./BgCardUserSection";
@@ -164,7 +158,9 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
         >
           <Button className="hover:bg-red-600 hover:text-white" size="sm">
             <CartIcon size="2em" />
-            <FormattedMessage id="BgCard.Ludum" />
+            <div className="hidden lg:flex">
+              <FormattedMessage id="BgCard.Ludum" />
+            </div>
           </Button>
         </Link>
         {editionEnabled && (
@@ -175,7 +171,9 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
               onPress={onOpen}
             >
               <EditIcon size="2em" />
-              <FormattedMessage id="BgCard.Edit" />
+              <div className="hidden lg:flex">
+                <FormattedMessage id="BgCard.Edit" />
+              </div>
             </Button>
             <UpdateBoardgameModal
               isOpen={isOpen}
