@@ -1,19 +1,12 @@
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Input,
-  Pagination,
-  Spinner,
-} from "@heroui/react";
-import { SearchIcon } from "../components/Icons";
+import { Card, CardBody, Input, Pagination, Spinner } from "@heroui/react";
+import { DbIcon } from "../components/Icons";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useUserInfos } from "../App";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { userRatings } from "../lib/api";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import BoardgameCard from "../components/BoardgameCard";
-import { filter, includes, isArray } from "lodash";
+import { debounce, filter, includes, isArray } from "lodash";
 import DiscordLoginButton from "../components/DiscordLoginButton";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 
@@ -21,9 +14,10 @@ const MyRatings = () => {
   const intl = useIntl();
   const { userInfos } = useUserInfos();
   const [inputValue, setInputValue] = useState("");
-  const [filteredBoardgames, setFilteredBoardgames] = useState();
+  const [filteredBoardgames, setFilteredBoardgames] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [displayedBoardgames, setDisplayedBoardgames] = useState([]);
+  const [debouncedValue, setDebouncedValue] = useState(inputValue);
   const {
     isPending,
     isError,
@@ -33,8 +27,29 @@ const MyRatings = () => {
     queryFn: userRatings,
     refetchOnWindowFocus: false,
     enabled: userInfos?.isLogged,
-    placeholderData: keepPreviousData,
   });
+
+  const debouncedQuery = useMemo(
+    () => debounce((value) => setDebouncedValue(value), 300),
+    []
+  );
+
+  useEffect(() => {
+    debouncedQuery(inputValue);
+  }, [inputValue, debouncedQuery]);
+
+  useEffect(() => {
+    if (!isPending && !isError && userInfos?.isLogged) {
+      if (debouncedValue) {
+        updateSearchValue(debouncedValue);
+      } else {
+        setFilteredBoardgames(boardgames);
+        setDisplayedBoardgames(
+          boardgames.slice(currentPage * 12 - 12, currentPage * 12)
+        );
+      }
+    }
+  }, [debouncedValue, boardgames, isPending, isError, userInfos?.isLogged]);
 
   const updateBoardgames = (bgs, page) => {
     setDisplayedBoardgames(bgs?.slice(page * 12 - 12, page * 12));
@@ -56,19 +71,6 @@ const MyRatings = () => {
     setFilteredBoardgames(results);
     updateBoardgames(results, 1);
   };
-
-  useEffect(() => {
-    if (!isPending && !isError && userInfos?.isLogged) {
-      if (inputValue) {
-        updateSearchValue(inputValue);
-      } else {
-        setFilteredBoardgames(boardgames);
-        setDisplayedBoardgames(
-          boardgames.slice(currentPage * 12 - 12, currentPage * 12)
-        );
-      }
-    }
-  }, [boardgames]);
 
   if (isPending) {
     if (userInfos?.isLogged) {
@@ -126,33 +128,19 @@ const MyRatings = () => {
               </i>
             </p>
           </div>
-          <div className="mt-8 full-w">
+          <div className="mt-8 w-full lg:w-2/5">
             <Input
-              variant="flat"
-              classNames={{
-                input: [
-                  "text-primary",
-                  "text-xl",
-                  "group-data-[hover=true]:text-zinc-700",
-                ],
-                innerWrapper: [
-                  "bg-transparent",
-                  "text-primary",
-                  "group-data-[hover=true]:text-zinc-700",
-                ],
-                inputWrapper: [
-                  "bg-zinc-700",
-                  "text-primary",
-                  "group-data-[hover=true]:bg-zinc-400",
-                  "group-data-[hover=true]:text-zinc-700",
-                  "group-data-[focus=true]:bg-zinc-600",
-                ],
-              }}
-              startContent={<SearchIcon />}
-              label={intl.formatMessage({ id: "Common.Title" })}
-              value={inputValue}
-              onValueChange={(value) => updateSearchValue(value)}
               isClearable
+              variant="faded"
+              color="warning"
+              size="lg"
+              value={inputValue}
+              onValueChange={setInputValue} // Directly set inputValue
+              radius="lg"
+              label={intl.formatMessage({ id: "SearchBg.InputLabel" })}
+              startContent={<DbIcon size="1.4em" />}
+              autoFocus
+              className="focus-input"
             />
           </div>
           <div className="mt-8">

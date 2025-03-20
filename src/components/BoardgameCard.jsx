@@ -6,15 +6,24 @@ import {
   CardHeader,
   Divider,
   Image,
+  useDisclosure,
 } from "@heroui/react";
-import { capitalize, upperCase } from "lodash";
+import { capitalize, toUpper, upperCase } from "lodash";
 import YoutubeEmbed from "./YoutubeEmbed";
-import { CartIcon, DiscordIcon, YoutubeIcon } from "./Icons";
+import {
+  CartIcon,
+  DiscordIcon,
+  EditIcon,
+  UsersIcon,
+  YoutubeIcon,
+} from "./Icons";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useState } from "react";
 import BgCardUserSection from "./BgCardUserSection";
 import AskForOropButton from "./AskForOropButton";
 import { Link } from "react-router-dom";
+import { userCanEdit } from "../lib/user";
+import UpdateBoardgameModal from "./UpdateBoardgameModal";
 
 const BoardgameCard = ({ boardgame, userInfos }) => {
   const [displayEmbed, setDisplayEmbed] = useState(false);
@@ -22,6 +31,9 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
     boardgame;
 
   const intl = useIntl();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const editionEnabled = userCanEdit(userInfos?.discordRoles);
 
   return (
     <Card
@@ -32,7 +44,7 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
     >
       <CardHeader>
         <div className="w-full">
-          <h1 className="font-semibold">{upperCase(title[0])}</h1>
+          <h1 className="font-semibold">{toUpper(title[0])}</h1>
           <div className="flex flex-row justify-between mt-2">
             <div className="flex flex-row ml-0 mt-auto mb-auto">
               <Image src="/yoel.jpg" width={30} />
@@ -47,17 +59,7 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
               )}
             </div>
             <div className="flex flex-row mt-auto mb-auto items-center">
-              <Button
-                isIconOnly
-                disabled
-                disableAnimation
-                disableRipple
-                radius="full"
-                size="sm"
-                className="bg-indigo-500 text-primary p-0 max-w-10"
-              >
-                <DiscordIcon fill={"currentColor"} />
-              </Button>
+              <UsersIcon size="2em" />
               {discordRating ? (
                 <Image
                   src={`/${discordRating}.webp`}
@@ -153,7 +155,7 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
           <FormattedMessage id="Common.SearchCount" values={{ searchCount }} />
         </div>
       </CardBody>
-      <CardFooter>
+      <CardFooter className="flex justify-between">
         <Link
           to={`https://www.ludum.fr/rechercher?s=${encodeURI(
             boardgame.title[0]
@@ -161,9 +163,27 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
           target="blank"
         >
           <Button className="hover:bg-red-600 hover:text-white" size="sm">
-            <CartIcon /> Achetez sur Ludum.fr
+            <CartIcon size="2em" />
+            <FormattedMessage id="BgCard.Ludum" />
           </Button>
         </Link>
+        {editionEnabled && (
+          <>
+            <Button
+              className="hover:bg-green-600 hover:text-white"
+              size="sm"
+              onPress={onOpen}
+            >
+              <EditIcon size="2em" />
+              <FormattedMessage id="BgCard.Edit" />
+            </Button>
+            <UpdateBoardgameModal
+              isOpen={isOpen}
+              onOpenChange={onOpenChange}
+              boardgame={boardgame}
+            />
+          </>
+        )}
       </CardFooter>
     </Card>
   );

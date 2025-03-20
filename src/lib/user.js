@@ -1,4 +1,5 @@
 import { clear, getItem } from "localforage";
+import { includes, intersection } from "lodash";
 
 export const isUserLogged = async () => {
   const id = await getItem("id");
@@ -31,4 +32,13 @@ export const getUserInfos = async () => {
   const id = await getId();
   const username = await getUsername();
   return { isLogged, userId, discordRoles, apikey, id, username };
+};
+
+export const userCanEdit = (discordRoles) => {
+  const authorizedEditionRoles = process.env.AUTHORIZED_SCRIBES.split(",");
+  const commonRoles = intersection(authorizedEditionRoles, discordRoles);
+  if (commonRoles?.length > 0) {
+    return true;
+  }
+  return false;
 };

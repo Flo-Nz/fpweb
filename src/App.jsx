@@ -12,7 +12,7 @@ import Footer from "./components/Footer";
 import CookieConsent from "react-cookie-consent";
 import { useIntl, FormattedMessage } from "react-intl";
 import { useEffect, useState } from "react";
-import { getUserApiKey, getUserInfos, isUserLogged } from "./lib/user";
+import { getUserApiKey, getUserInfos } from "./lib/user";
 import { verifyJwt } from "./lib/jwt";
 import { fetchUserInfos } from "./lib/api";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

@@ -28,6 +28,7 @@ const GoogleLoginButton = ({ size }) => {
     <Button
       startContent={<GoogleIcon size={size} />}
       onPress={() => googleLogin()}
+      className="font-semibold text-gray-600"
     >
       <FormattedMessage id="Nav.GoogleLogin" />
     </Button>

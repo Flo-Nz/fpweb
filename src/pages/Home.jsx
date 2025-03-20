@@ -1,12 +1,5 @@
 import { Button, Card, CardBody, Image } from "@heroui/react";
-import {
-  AskOropIcon,
-  CartIcon,
-  DbIcon,
-  MyRatingsIcon,
-  PlusIcon,
-  SearchIcon,
-} from "../components/Icons";
+import { AskOropIcon, DbIcon, MyRatingsIcon } from "../components/Icons";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import { delay } from "lodash";

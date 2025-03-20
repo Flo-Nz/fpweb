@@ -1,5 +1,5 @@
 import { Card, CardBody, Input, Spinner } from "@heroui/react";
-import { SearchIcon } from "../components/Icons";
+import { DbIcon } from "../components/Icons";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useUserInfos } from "../App";
 import { useEffect, useMemo, useState } from "react";
@@ -62,9 +62,9 @@ const SearchBoardgames = () => {
               onValueChange={setInputValue}
               radius="lg"
               label={intl.formatMessage({ id: "SearchBg.InputLabel" })}
-              startContent={
-                <SearchIcon className="text-black mb-0.5 text-slate-400 pointer-events-none flex-shrink-0" />
-              }
+              startContent={<DbIcon size="1.4em" />}
+              autoFocus
+              className="focus-input"
             />
           </div>
           <div className="mt-8">

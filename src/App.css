@@ -21,6 +21,11 @@ header {
   color: darkblue;
 }
 
+.focus-input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 @media screen and (max-width: 600px) {
   #root {
     width: 100%;
