@@ -36,7 +36,7 @@ const BoardgamesList = () => {
   const {
     isPending,
     isError,
-    data: { boardgames, page, totalDocuments, totalPages } = {},
+    data: { boardgames = [], page, totalDocuments, totalPages } = {},
   } = useQuery({
     queryKey: ["allOrops", currentPage],
     queryFn: () => getAllOrop({ page: currentPage }),
@@ -109,83 +109,91 @@ const BoardgamesList = () => {
               </i>
             </p>
           </div>
-          <div className="m-auto pt-8">
-            <Pagination
-              siblings={3}
-              total={totalPages}
-              color="danger"
-              page={currentPage}
-              onChange={(page) => updatePage(page)}
-            />
-          </div>
-          <div className="mt-8 lg:w-[80%] w-full m-auto">
-            <Table
-              aria-label={`All boardgames page #${currentPage}`}
-              isHeaderSticky
-              classNames={{
-                wrapper: ["bg-zinc-700"],
-                tbody: ["text-primary"],
-                th: ["bg-zinc-500", "text-primary"],
-              }}
-            >
-              <TableHeader>
-                <TableColumn>
-                  <FormattedMessage id="BoardgamesList.Column.Title" />
-                </TableColumn>
-                <TableColumn className="text-center">
-                  <FormattedMessage id="Boardgame.AlternateTitles" />
-                </TableColumn>
-                <TableColumn className="text-center">OROP</TableColumn>
-                <TableColumn className="text-center">
-                  <FormattedMessage id="BgCard.Edit" />
-                </TableColumn>
-              </TableHeader>
-              <TableBody>
-                {boardgames.map((boardgame) => (
-                  <TableRow key={boardgame.title[0]}>
-                    <TableCell className="font-semibold">
-                      {toUpper(boardgame.title[0])}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {boardgame.title.length > 1 &&
-                        boardgame.title
-                          .slice(1)
-                          .map((alternateTitle, index) => (
-                            <span key={alternateTitle + index}>
-                              {capitalize(alternateTitle)}
-                              {index === boardgame.title.slice(1).length - 1
-                                ? ""
-                                : ", "}
-                            </span>
-                          ))}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {boardgame.fpOrop?.youtubeUrl && (
-                        <Link
-                          isExternal
-                          href={`${boardgame.fpOrop?.youtubeUrl}`}
-                        >
-                          <YoutubeIcon size="2em" />
-                        </Link>
-                      )}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <EditTableCell boardgame={boardgame} />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-          <div className="m-auto pt-8 pb-8">
-            <Pagination
-              siblings={3}
-              total={totalPages}
-              color="danger"
-              page={currentPage}
-              onChange={(page) => updatePage(page)}
-            />
-          </div>
+          {boardgames.length > 0 ? (
+            <>
+              <div className="m-auto pt-8">
+                <Pagination
+                  siblings={3}
+                  total={totalPages}
+                  color="danger"
+                  page={currentPage}
+                  onChange={(page) => updatePage(page)}
+                />
+              </div>
+              <div className="mt-8 lg:w-[80%] w-full m-auto">
+                <Table
+                  aria-label={`All boardgames page #${currentPage}`}
+                  isHeaderSticky
+                  classNames={{
+                    wrapper: ["bg-zinc-700"],
+                    tbody: ["text-primary"],
+                    th: ["bg-zinc-500", "text-primary"],
+                  }}
+                >
+                  <TableHeader>
+                    <TableColumn>
+                      <FormattedMessage id="BoardgamesList.Column.Title" />
+                    </TableColumn>
+                    <TableColumn className="text-center">
+                      <FormattedMessage id="Boardgame.AlternateTitles" />
+                    </TableColumn>
+                    <TableColumn className="text-center">OROP</TableColumn>
+                    <TableColumn className="text-center">
+                      <FormattedMessage id="BgCard.Edit" />
+                    </TableColumn>
+                  </TableHeader>
+                  <TableBody>
+                    {boardgames.map((boardgame) => (
+                      <TableRow key={boardgame.title[0]}>
+                        <TableCell className="font-semibold">
+                          {toUpper(boardgame.title[0])}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {boardgame.title.length > 1 &&
+                            boardgame.title
+                              .slice(1)
+                              .map((alternateTitle, index) => (
+                                <span key={alternateTitle + index}>
+                                  {capitalize(alternateTitle)}
+                                  {index === boardgame.title.slice(1).length - 1
+                                    ? ""
+                                    : ", "}
+                                </span>
+                              ))}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {boardgame.fpOrop?.youtubeUrl && (
+                            <Link
+                              isExternal
+                              href={`${boardgame.fpOrop?.youtubeUrl}`}
+                            >
+                              <YoutubeIcon size="2em" />
+                            </Link>
+                          )}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <EditTableCell boardgame={boardgame} />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+              <div className="m-auto pt-8 pb-8">
+                <Pagination
+                  siblings={3}
+                  total={totalPages}
+                  color="danger"
+                  page={currentPage}
+                  onChange={(page) => updatePage(page)}
+                />
+              </div>
+            </>
+          ) : (
+            <div className="pt-8 pb-8 m-auto text-xl text-red-600">
+              <FormattedMessage id="BoardgamesList.Empty" />
+            </div>
+          )}
         </CardBody>
       </Card>
     </div>

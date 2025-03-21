@@ -10,6 +10,7 @@
     "Boardgame.AlternateTitles": "Titres alternatifs",
     "BoardgamesList.Column.Orop": "Vidéo OROP",
     "BoardgamesList.Column.Title": "Titre principal",
+    "BoardgamesList.Empty": "Erreur : aucun jeu trouvé. L'API serait-elle down ?",
     "BoardgamesList.Subtitle": "Parcourir librement les jeux à éditer",
     "BoardgamesList.Title": "LISTE DES JEUX",
     "Common.AskStatus": "Voter",
