@@ -21,6 +21,7 @@ import { useEffect, useState, useCallback, memo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { YoutubeIcon } from "../components/Icons";
 import EditTableCell from "../components/EditTableCell";
+import DeleteTableCell from "../components/DeleteTableCell";
 
 const BoardgamesList = () => {
   const location = useLocation();
@@ -141,6 +142,9 @@ const BoardgamesList = () => {
                     <TableColumn className="text-center">
                       <FormattedMessage id="BgCard.Edit" />
                     </TableColumn>
+                    <TableColumn className="text-center">
+                      <FormattedMessage id="Common.Delete" />
+                    </TableColumn>
                   </TableHeader>
                   <TableBody>
                     {boardgames.map((boardgame) => (
@@ -173,6 +177,9 @@ const BoardgamesList = () => {
                         </TableCell>
                         <TableCell className="text-center">
                           <EditTableCell boardgame={boardgame} />
+                        </TableCell>
+                        <TableCell>
+                          <DeleteTableCell boardgame={boardgame} />
                         </TableCell>
                       </TableRow>
                     ))}

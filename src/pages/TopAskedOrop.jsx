@@ -16,11 +16,9 @@ import { useQuery } from "@tanstack/react-query";
 
 import AskForOropButton from "../components/AskForOropButton";
 import { capitalize } from "lodash";
-import useScreenMobile from "../hooks/useScreenMobile";
 
 const TopAskedOrop = () => {
   const { userInfos } = useUserInfos();
-  const isMobile = useScreenMobile();
 
   const {
     isPending,
@@ -84,9 +82,12 @@ const TopAskedOrop = () => {
                   <FormattedMessage id="Common.Title" />
                 </TableColumn>
                 <TableColumn className="text-center">
-                  <FormattedMessage
-                    id={isMobile ? "#" : "TopAskedOrop.Count"}
-                  />
+                  <div className="lg:hidden">
+                    <FormattedMessage id="#" />
+                  </div>
+                  <div className="hidden lg:flex">
+                    <FormattedMessage id="TopAskedOrop.Count" />
+                  </div>
                 </TableColumn>
                 <TableColumn className="text-center">
                   <FormattedMessage id="Common.AskStatus" />

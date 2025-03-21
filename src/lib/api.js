@@ -150,6 +150,24 @@ export const updateBoardgame = async (id, payload) => {
   }
 };
 
+export const deleteBoardgame = async (id) => {
+  try {
+    const apikey = await getApiKey();
+    console.log("api key", apikey);
+    const { data } = await axios({
+      headers: { apikey },
+      method: "delete",
+      baseURL: process.env.API_BASE_URL,
+      url: `/boardgame/${id}`,
+    });
+
+    return data;
+  } catch (error) {
+    console.log("error", error);
+    return error.message;
+  }
+};
+
 export const getAllOrop = async ({ page }) => {
   try {
     const apikey = await getApiKey();
