@@ -12,7 +12,6 @@ import { CheckIcon, ChevronDownIcon } from "./Icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postUserRating, removeUserRating } from "../lib/api";
 import { useState } from "react";
-import useScreenMobile from "../hooks/useScreenMobile";
 import DiscordLoginButton from "./DiscordLoginButton";
 import GoogleLoginButton from "./GoogleLoginButton";
 
@@ -73,14 +72,13 @@ const BgCardUserSection = ({ boardgame, userInfos }) => {
   }
   const { username, userId } = userInfos;
   const userRating = getUserRating(boardgame, userId);
-  const isMobile = useScreenMobile();
 
   return (
     <div className="mt-2">
       <h1 className="font-semibold">{capitalize(username)}</h1>
       <div className="flex flex-row items-center">
         <div>
-          <Dropdown showArrow backdrop={!isMobile ? "blur" : "transparent"}>
+          <Dropdown showArrow backdrop="blur">
             <DropdownTrigger>
               <Button endContent={<ChevronDownIcon size="1.5em" />}>
                 {userRating ? (

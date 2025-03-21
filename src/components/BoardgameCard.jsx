@@ -10,7 +10,13 @@ import {
 } from "@heroui/react";
 import { capitalize, toUpper, upperCase } from "lodash";
 import YoutubeEmbed from "./YoutubeEmbed";
-import { CartIcon, EditIcon, UsersIcon, YoutubeIcon } from "./Icons";
+import {
+  CancelIcon,
+  CartIcon,
+  EditIcon,
+  UsersIcon,
+  YoutubeIcon,
+} from "./Icons";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useState } from "react";
 import BgCardUserSection from "./BgCardUserSection";
@@ -18,6 +24,7 @@ import AskForOropButton from "./AskForOropButton";
 import { Link } from "react-router-dom";
 import { userCanEdit } from "../lib/user";
 import UpdateBoardgameModal from "./UpdateBoardgameModal";
+import DeleteBoardgameConfirmationModal from "./DeleteBoardgameConfirmationModal";
 
 const BoardgameCard = ({ boardgame, userInfos }) => {
   const [displayEmbed, setDisplayEmbed] = useState(false);
@@ -25,7 +32,16 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
     boardgame;
 
   const intl = useIntl();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isEditModalOpen,
+    onOpen: onEditModalOpen,
+    onOpenChange: onEditModalOpenChange,
+  } = useDisclosure();
+  const {
+    isOpen: isDeleteModalOpen,
+    onOpen: onDeleteModalOpen,
+    onOpenChange: onDeleteModalOpenChange,
+  } = useDisclosure();
 
   const editionEnabled = userCanEdit(userInfos?.discordRoles);
 
@@ -149,7 +165,7 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
           <FormattedMessage id="Common.SearchCount" values={{ searchCount }} />
         </div>
       </CardBody>
-      <CardFooter className="flex justify-between">
+      <CardFooter className="flex justify-between items-center">
         <Link
           to={`https://www.ludum.fr/rechercher?s=${encodeURI(
             boardgame.title[0]
@@ -164,11 +180,11 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
           </Button>
         </Link>
         {editionEnabled && (
-          <>
+          <div className="flex flex-row gap-2 items-center">
             <Button
               className="hover:bg-green-600 hover:text-white"
               size="sm"
-              onPress={onOpen}
+              onPress={onEditModalOpen}
             >
               <EditIcon size="2em" />
               <div className="hidden lg:flex">
@@ -176,11 +192,26 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
               </div>
             </Button>
             <UpdateBoardgameModal
-              isOpen={isOpen}
-              onOpenChange={onOpenChange}
+              isOpen={isEditModalOpen}
+              onOpenChange={onEditModalOpenChange}
               boardgame={boardgame}
             />
-          </>
+            <Button
+              isIconOnly
+              size="sm"
+              variant="bordered"
+              onPress={onDeleteModalOpen}
+              color="danger"
+              className="border-transparent hover:bg-red-500"
+            >
+              <CancelIcon size="2em" />
+            </Button>
+            <DeleteBoardgameConfirmationModal
+              isOpen={isDeleteModalOpen}
+              onOpenChange={onDeleteModalOpenChange}
+              boardgame={boardgame}
+            />
+          </div>
         )}
       </CardFooter>
     </Card>
