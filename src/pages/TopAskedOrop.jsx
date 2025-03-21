@@ -9,16 +9,16 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/react";
-import { FormattedMessage, useIntl } from "react-intl";
-import { useUserInfos } from "../App";
+import { FormattedMessage } from "react-intl";
 import { getTopAskedOrop } from "../lib/api";
 import { useQuery } from "@tanstack/react-query";
 
 import AskForOropButton from "../components/AskForOropButton";
 import { capitalize } from "lodash";
+import { useUserInfos } from "../providers/UserInfosContext";
 
 const TopAskedOrop = () => {
-  const { userInfos } = useUserInfos();
+  const userInfos = useUserInfos();
 
   const {
     isPending,
@@ -105,7 +105,6 @@ const TopAskedOrop = () => {
                     <TableCell className="text-center">
                       <AskForOropButton
                         boardgame={boardgame}
-                        userInfos={userInfos}
                         classNames={{
                           popover: "text-secondary",
                           button: "text-primary",

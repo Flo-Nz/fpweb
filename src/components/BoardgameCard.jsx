@@ -25,8 +25,11 @@ import { Link } from "react-router-dom";
 import { userCanEdit } from "../lib/user";
 import UpdateBoardgameModal from "./UpdateBoardgameModal";
 import DeleteBoardgameConfirmationModal from "./DeleteBoardgameConfirmationModal";
+import ScrapYoutubeButton from "./ScrapYoutubeButton";
+import { useUserInfos } from "../providers/UserInfosContext";
 
-const BoardgameCard = ({ boardgame, userInfos }) => {
+const BoardgameCard = ({ boardgame }) => {
+  const userInfos = useUserInfos();
   const [displayEmbed, setDisplayEmbed] = useState(false);
   const { _id, title, discordRating, discordOrop, searchCount, fpOrop } =
     boardgame;
@@ -117,7 +120,6 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
               <AskForOropButton
                 classNames={{ button: "mt-2 invisible" }}
                 boardgame={boardgame}
-                userInfos={userInfos}
               />
             </div>
           )}
@@ -133,17 +135,15 @@ const BoardgameCard = ({ boardgame, userInfos }) => {
               >
                 <FormattedMessage id="Orop.Missing" />
               </Button>
-              <AskForOropButton
-                classNames={{ button: "mt-2" }}
-                boardgame={boardgame}
-                userInfos={userInfos}
-              />
+              <div className="mt-2">
+                <ScrapYoutubeButton boardgame={boardgame} addAskForOropButton />
+              </div>
             </div>
           )}
         </div>
         <Divider className="mt-6" />
         <div className="flex">
-          <BgCardUserSection userInfos={userInfos} boardgame={boardgame} />
+          <BgCardUserSection boardgame={boardgame} />
         </div>
         <Divider className="mt-2" />
         <div className="bg-transparent text-sm text-right grid grid-cols-1 flex-1 mt-2">

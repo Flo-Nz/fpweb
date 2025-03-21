@@ -19,9 +19,11 @@ import { useQuery } from "@tanstack/react-query";
 import { capitalize, toUpper } from "lodash";
 import { useEffect, useState, useCallback, memo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { YoutubeIcon } from "../components/Icons";
+import { NotFoundIcon, YoutubeIcon } from "../components/Icons";
 import EditTableCell from "../components/EditTableCell";
 import DeleteTableCell from "../components/DeleteTableCell";
+import { differenceInDays } from "date-fns";
+import ScrapYoutubeButton from "../components/ScrapYoutubeButton";
 
 const BoardgamesList = () => {
   const location = useLocation();
@@ -109,6 +111,12 @@ const BoardgamesList = () => {
                 <FormattedMessage id="BoardgamesList.Subtitle" />
               </i>
             </p>
+            <p className="text-5xl font-bold bg-gradient-to-r from-blue-500 to-pink-500 text-transparent bg-clip-text animate-gradient">
+              <FormattedMessage
+                id="BoardgamesList.Count"
+                values={{ totalDocuments }}
+              />
+            </p>
           </div>
           {boardgames.length > 0 ? (
             <>
@@ -174,6 +182,23 @@ const BoardgamesList = () => {
                               <YoutubeIcon size="2em" />
                             </Link>
                           )}
+                          {!boardgame.fpOrop?.youtubeUrl &&
+                            (!boardgame.lastYoutubeScrapping ||
+                              differenceInDays(
+                                new Date(),
+                                boardgame.lastYoutubeScrapping
+                              ) > 10) && (
+                              <ScrapYoutubeButton boardgame={boardgame} />
+                            )}
+                          {!boardgame.fpOrop?.youtubeUrl &&
+                            differenceInDays(
+                              new Date(),
+                              boardgame.lastYoutubeScrapping
+                            ) < 10 && (
+                              <div className="justify-items-center">
+                                <NotFoundIcon size="2em" />
+                              </div>
+                            )}
                         </TableCell>
                         <TableCell className="text-center">
                           <EditTableCell boardgame={boardgame} />

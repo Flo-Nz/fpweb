@@ -17,6 +17,7 @@ import { verifyJwt } from "./lib/jwt";
 import { fetchUserInfos } from "./lib/api";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { UserInfosProvider } from "./providers/UserInfosContext";
 
 const queryClient = new QueryClient();
 
@@ -53,34 +54,28 @@ const App = () => {
   return (
     <GoogleOAuthProvider clientId={process.env.GOOGLE_OAUTH_ID_CLIENT}>
       <QueryClientProvider client={queryClient}>
-        <NavBar userInfos={userInfos} />
-        <Layout>
-          {location?.pathname === "/" ? (
-            <Home userInfos={userInfos} />
-          ) : (
-            <Outlet context={{ userInfos }} />
-          )}
-        </Layout>
-        <Footer />
-        <CookieConsent
-          location="bottom"
-          buttonText={intl.formatMessage({ id: "Cookies.Accept" })}
-          declineButtonText={intl.formatMessage({ id: "Cookies.Decline" })}
-          style={{ background: "#2B373B" }}
-          buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
-          declineButtonStyle={{ fontSize: "13px" }}
-          expires={150}
-          cookieName="CookieConsent"
-          visible={"byCookieValue"}
-          enableDeclineButton
-        >
-          <FormattedMessage id="Cookies.Text" />
-        </CookieConsent>
+        <UserInfosProvider userInfos={userInfos}>
+          <NavBar />
+          <Layout>{location?.pathname === "/" ? <Home /> : <Outlet />}</Layout>
+          <Footer />
+          <CookieConsent
+            location="bottom"
+            buttonText={intl.formatMessage({ id: "Cookies.Accept" })}
+            declineButtonText={intl.formatMessage({ id: "Cookies.Decline" })}
+            style={{ background: "#2B373B" }}
+            buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
+            declineButtonStyle={{ fontSize: "13px" }}
+            expires={150}
+            cookieName="CookieConsent"
+            visible={"byCookieValue"}
+            enableDeclineButton
+          >
+            <FormattedMessage id="Cookies.Text" />
+          </CookieConsent>
+        </UserInfosProvider>
       </QueryClientProvider>
     </GoogleOAuthProvider>
   );
 };
 
 export default App;
-
-export const useUserInfos = () => useOutletContext();

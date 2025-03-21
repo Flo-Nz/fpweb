@@ -185,3 +185,19 @@ export const getAllOrop = async ({ page }) => {
     return error.message;
   }
 };
+
+export const getYoutubeOrop = async (id) => {
+  try {
+    const apikey = await getApiKey();
+    const { data } = await axios({
+      headers: { apikey },
+      method: "get",
+      baseURL: process.env.API_BASE_URL,
+      url: `/boardgame/${id}/youtube`,
+    });
+
+    return data;
+  } catch (error) {
+    return error.message;
+  }
+};
