@@ -9,17 +9,23 @@ import {
 } from "@heroui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateBoardgame } from "../lib/api";
-import { useState } from "react";
-import { AddIcon, TrashIcon } from "./Icons";
+import { useState, useEffect, useCallback, memo } from "react";
+import { AddIcon, CancelIcon, SaveIcon, TrashIcon } from "./Icons";
 import { FormattedMessage, useIntl } from "react-intl";
 import { filter } from "lodash";
 
 const UpdateBoardgameModal = ({ boardgame, isOpen, onOpenChange }) => {
   const queryClient = useQueryClient();
   const [error, setError] = useState(null);
-  const [editedTitles, setEditedTitles] = useState([...boardgame.title]);
+  const [editedTitles, setEditedTitles] = useState([]);
 
   const intl = useIntl();
+
+  useEffect(() => {
+    if (boardgame) {
+      setEditedTitles([...boardgame.title]);
+    }
+  }, [boardgame]);
 
   const updateBoardgameMutation = useMutation({
     mutationFn: ({ id, payload }) => updateBoardgame(id, payload),
@@ -31,32 +37,49 @@ const UpdateBoardgameModal = ({ boardgame, isOpen, onOpenChange }) => {
       queryClient.invalidateQueries({
         queryKey: ["myRatings"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["allOrops"],
+      });
     },
     onError: (err) => setError(err),
   });
 
-  const handleUpdate = () =>
-    updateBoardgameMutation.mutate({
-      id: boardgame.id,
-      payload: { title: editedTitles },
-    });
+  const handleUpdate = useCallback(() => {
+    if (boardgame) {
+      updateBoardgameMutation.mutate({
+        id: boardgame.id,
+        payload: { title: editedTitles },
+      });
+    }
+  }, [boardgame, editedTitles, updateBoardgameMutation]);
 
-  const handleChange = (index) => (value) => {
-    const newTitles = [...editedTitles];
-    newTitles[index] = value;
-    setEditedTitles(newTitles);
-  };
+  const handleChange = useCallback(
+    (index) => (value) => {
+      setEditedTitles((prevTitles) => {
+        const newTitles = [...prevTitles];
+        newTitles[index] = value;
+        return newTitles;
+      });
+    },
+    []
+  );
 
-  const addTitleInput = () => {
-    setEditedTitles([...editedTitles, ""]);
-  };
+  const addTitleInput = useCallback(() => {
+    setEditedTitles((prevTitles) => [...prevTitles, ""]);
+  }, []);
 
-  const removeTitleInput = (index) => {
-    const newEditedTitles = filter(editedTitles, (_, i) => i !== index);
-    setEditedTitles(newEditedTitles);
-  };
+  const removeTitleInput = useCallback((index) => {
+    setEditedTitles((prevTitles) => filter(prevTitles, (_, i) => i !== index));
+  }, []);
 
-  const isRequiredInvalid = () => !editedTitles[0] || editedTitles[0] === "";
+  const isRequiredInvalid = useCallback(
+    () => !editedTitles[0] || editedTitles[0] === "",
+    [editedTitles]
+  );
+
+  if (!boardgame) {
+    return null; // Return null if boardgame is not defined
+  }
 
   return (
     <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}>
@@ -66,11 +89,11 @@ const UpdateBoardgameModal = ({ boardgame, isOpen, onOpenChange }) => {
             <ModalHeader className="flex flex-col gap-1">
               <FormattedMessage
                 id="UpdateBoardgameModal.Title"
-                values={{ title: boardgame.title[0] }}
+                values={{ title: boardgame?.title[0] }}
               />
             </ModalHeader>
             <ModalBody>
-              {editedTitles.map((title, index) => (
+              {editedTitles?.map((title, index) => (
                 <div key={index} className="flex items-center gap-1">
                   <Input
                     isClearable
@@ -92,8 +115,8 @@ const UpdateBoardgameModal = ({ boardgame, isOpen, onOpenChange }) => {
                       },
                       { index }
                     )}
-                    autoFocus={index === 0 ? true : false}
-                    isRequired={index === 0 ? true : false}
+                    autoFocus={index === 0}
+                    isRequired={index === 0}
                     isInvalid={isRequiredInvalid(index, title)}
                     errorMessage="Veuillez entrer un titre"
                   />
@@ -114,13 +137,16 @@ const UpdateBoardgameModal = ({ boardgame, isOpen, onOpenChange }) => {
                   onPress={addTitleInput}
                 >
                   <AddIcon />
-                  Ajouter un titre alternatif
+                  <FormattedMessage id="UpdateBoardgameModal.AddTitle" />
                 </Button>
               )}
             </ModalBody>
             <ModalFooter>
               <Button color="danger" variant="flat" onPress={onClose}>
-                Close
+                <CancelIcon size="2em" />
+                <span className="hidden lg:flex">
+                  <FormattedMessage id="UpdateBoardgameModal.Close" />
+                </span>
               </Button>
               <Button
                 color="success"
@@ -130,7 +156,10 @@ const UpdateBoardgameModal = ({ boardgame, isOpen, onOpenChange }) => {
                 }}
                 disabled={isRequiredInvalid()}
               >
-                Save
+                <SaveIcon size="2em" />
+                <span className="hidden lg:flex">
+                  <FormattedMessage id="UpdateBoardgameModal.Save" />
+                </span>
               </Button>
             </ModalFooter>
           </>
@@ -140,4 +169,4 @@ const UpdateBoardgameModal = ({ boardgame, isOpen, onOpenChange }) => {
   );
 };
 
-export default UpdateBoardgameModal;
+export default memo(UpdateBoardgameModal);

@@ -7,12 +7,17 @@ import { searchOrop } from "../lib/api";
 import { useQuery } from "@tanstack/react-query";
 import BoardgameCard from "../components/BoardgameCard";
 import { debounce } from "lodash";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const SearchBoardgames = () => {
   const intl = useIntl();
   const { userInfos } = useUserInfos();
-  const [inputValue, setInputValue] = useState("");
-  const [debouncedValue, setDebouncedValue] = useState(inputValue);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const initialTitle = queryParams.get("title") || "";
+  const [inputValue, setInputValue] = useState(initialTitle);
+  const [debouncedValue, setDebouncedValue] = useState(initialTitle);
 
   const debouncedQuery = useMemo(
     () => debounce((value) => setDebouncedValue(value), 300),
@@ -22,6 +27,16 @@ const SearchBoardgames = () => {
   useEffect(() => {
     debouncedQuery(inputValue);
   }, [inputValue, debouncedQuery]);
+
+  useEffect(() => {
+    if (debouncedValue !== initialTitle) {
+      if (debouncedValue) {
+        navigate(`?title=${debouncedValue}`, { replace: true });
+      } else {
+        navigate(location.pathname, { replace: true });
+      }
+    }
+  }, [debouncedValue, navigate, location.pathname, initialTitle]);
 
   const {
     isLoading,

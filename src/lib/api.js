@@ -149,3 +149,21 @@ export const updateBoardgame = async (id, payload) => {
     return error.message;
   }
 };
+
+export const getAllOrop = async ({ page }) => {
+  try {
+    const apikey = await getApiKey();
+    const {
+      data: { data: boardgames, currentPage, totalPages, totalDocuments },
+    } = await axios({
+      headers: { apikey },
+      method: "get",
+      baseURL: process.env.API_BASE_URL,
+      url: `/orop/all?page=${page || 1}`,
+    });
+
+    return { boardgames, currentPage, totalPages, totalDocuments };
+  } catch (error) {
+    return error.message;
+  }
+};
