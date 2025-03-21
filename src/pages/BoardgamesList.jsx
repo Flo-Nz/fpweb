@@ -112,7 +112,10 @@ const BoardgamesList = () => {
               </i>
             </p>
             <p className="text-5xl font-bold bg-gradient-to-r from-blue-500 to-pink-500 text-transparent bg-clip-text animate-gradient">
-              {totalDocuments} JEUX DANS LA BASE !
+              <FormattedMessage
+                id="BoardgamesList.Count"
+                values={{ totalDocuments }}
+              />
             </p>
           </div>
           {boardgames.length > 0 ? (
