@@ -18,7 +18,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   ChevronDownIcon,
   DiscordIcon,
-  DiscordOutlineIcon,
   FacebookIcon,
   InstagramIcon,
   YoutubeIcon,
@@ -26,7 +25,7 @@ import {
 import { mainNav } from "../assets/content/navigationMenu";
 import { useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
-import { logoutUser } from "../lib/user";
+import { logoutUser, userCanEdit } from "../lib/user";
 import GoogleLoginButton from "./GoogleLoginButton";
 import DiscordLoginButton from "./DiscordLoginButton";
 
@@ -41,6 +40,7 @@ const NavBar = ({ userInfos }) => {
   const currentLocation = location.pathname.split("/")?.[1];
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isLogged } = userInfos;
+  const editionEnabled = userCanEdit(userInfos?.discordRoles);
 
   return (
     <>
@@ -169,20 +169,46 @@ const NavBar = ({ userInfos }) => {
                     key={nav.id}
                   >
                     {nav.elements.map((elem) => (
-                      <DropdownItem
-                        key={elem.id}
-                        description={
-                          elem?.description
-                            ? intl.formatMessage({
-                                id: elem.description,
-                              })
-                            : ""
-                        }
-                        startContent={icons[elem.icon]}
-                        onPress={() => navigate(elem.path)}
-                      >
-                        <FormattedMessage id={elem.title} key={elem.title} />
-                      </DropdownItem>
+                      <>
+                        {elem.scribeOnly && editionEnabled && (
+                          <DropdownItem
+                            key={elem.id}
+                            description={
+                              elem?.description
+                                ? intl.formatMessage({
+                                    id: elem.description,
+                                  })
+                                : ""
+                            }
+                            startContent={icons[elem.icon]}
+                            onPress={() => navigate(elem.path)}
+                          >
+                            <FormattedMessage
+                              id={elem.title}
+                              key={elem.title}
+                            />
+                          </DropdownItem>
+                        )}
+                        {!elem.scribeOnly && (
+                          <DropdownItem
+                            key={elem.id}
+                            description={
+                              elem?.description
+                                ? intl.formatMessage({
+                                    id: elem.description,
+                                  })
+                                : ""
+                            }
+                            startContent={icons[elem.icon]}
+                            onPress={() => navigate(elem.path)}
+                          >
+                            <FormattedMessage
+                              id={elem.title}
+                              key={elem.title}
+                            />
+                          </DropdownItem>
+                        )}
+                      </>
                     ))}
                   </DropdownMenu>
                 </Dropdown>

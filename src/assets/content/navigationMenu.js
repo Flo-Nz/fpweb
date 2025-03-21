@@ -29,6 +29,12 @@ export const mainNav = [
     path: "my-account",
     elements: [
       { id: "my-ratings", title: "Nav.MyRatings", path: "my-account/ratings" },
+      {
+        id: "boardgames-list",
+        title: "Nav.BoardgamesList",
+        path: "boardgames/list",
+        scribeOnly: true,
+      },
     ],
   },
 ];

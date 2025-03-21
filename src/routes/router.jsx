@@ -5,6 +5,7 @@ import Legal from "../pages/Legal";
 import SearchBoardgames from "../pages/SearchBoardgames";
 import MyRatings from "../pages/MyRatings";
 import TopAskedOrop from "../pages/TopAskedOrop";
+import BoardgamesList from "../pages/BoardgamesList";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
         path: "/legal",
         element: <Legal />,
       },
+      { path: "/boardgames/list", element: <BoardgamesList /> },
     ],
   },
 ]);

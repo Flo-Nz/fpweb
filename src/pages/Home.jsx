@@ -26,9 +26,7 @@ const Home = () => {
 
           <div className="mt-4 text-center">
             <h2>
-              Rechercher des épisodes de l'émission "On rejoue ou pas ?", faire
-              ta propre notation ou demander à Yoël de traiter un jeu spécifique
-              ? Tout est possible ici !
+              <FormattedMessage id="Home.Description" />
             </h2>
             <div className="m-auto lg:w-3/4 grid auto-rows-fr gap-4 mt-8 mb-8">
               <Button
