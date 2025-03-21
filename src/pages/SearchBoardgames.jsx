@@ -1,17 +1,17 @@
 import { Card, CardBody, Input, Spinner } from "@heroui/react";
 import { DbIcon } from "../components/Icons";
 import { FormattedMessage, useIntl } from "react-intl";
-import { useUserInfos } from "../App";
 import { useEffect, useMemo, useState } from "react";
 import { searchOrop } from "../lib/api";
 import { useQuery } from "@tanstack/react-query";
 import BoardgameCard from "../components/BoardgameCard";
 import { debounce } from "lodash";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useUserInfos } from "../providers/UserInfosContext";
 
 const SearchBoardgames = () => {
+  const userInfos = useUserInfos();
   const intl = useIntl();
-  const { userInfos } = useUserInfos();
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -109,11 +109,7 @@ const SearchBoardgames = () => {
               {Array.isArray(boardgames) &&
                 boardgames.length > 0 &&
                 boardgames.map((bg) => (
-                  <BoardgameCard
-                    key={bg._id?.toString()}
-                    boardgame={bg}
-                    userInfos={userInfos}
-                  />
+                  <BoardgameCard key={bg._id?.toString()} boardgame={bg} />
                 ))}
             </div>
           </div>

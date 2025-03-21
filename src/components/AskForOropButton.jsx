@@ -1,21 +1,13 @@
-import {
-  Button,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@heroui/react";
+import { Button, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { includes } from "lodash";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postAskForOrop } from "../lib/api";
 import { useState } from "react";
+import { useUserInfos } from "../providers/UserInfosContext";
 
-const AskForOropButton = ({
-  boardgame,
-  userInfos,
-  classNames,
-  buttonVariant,
-}) => {
+const AskForOropButton = ({ boardgame, classNames, buttonVariant }) => {
+  const userInfos = useUserInfos();
   const queryClient = useQueryClient();
   const [error, setError] = useState(null);
 

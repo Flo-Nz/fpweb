@@ -28,12 +28,14 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { logoutUser, userCanEdit } from "../lib/user";
 import GoogleLoginButton from "./GoogleLoginButton";
 import DiscordLoginButton from "./DiscordLoginButton";
+import { useUserInfos } from "../providers/UserInfosContext";
 
 const icons = {
   chevron: <ChevronDownIcon size={16} />,
 };
 
-const NavBar = ({ userInfos }) => {
+const NavBar = () => {
+  const userInfos = useUserInfos();
   const intl = useIntl();
   const location = useLocation();
   const navigate = useNavigate();

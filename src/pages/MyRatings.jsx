@@ -1,7 +1,6 @@
 import { Card, CardBody, Input, Pagination, Spinner } from "@heroui/react";
 import { DbIcon } from "../components/Icons";
 import { FormattedMessage, useIntl } from "react-intl";
-import { useUserInfos } from "../App";
 import { useEffect, useMemo, useState } from "react";
 import { userRatings } from "../lib/api";
 import { useQuery } from "@tanstack/react-query";
@@ -9,10 +8,11 @@ import BoardgameCard from "../components/BoardgameCard";
 import { debounce, filter, includes, isArray } from "lodash";
 import DiscordLoginButton from "../components/DiscordLoginButton";
 import GoogleLoginButton from "../components/GoogleLoginButton";
+import { useUserInfos } from "../providers/UserInfosContext";
 
 const MyRatings = () => {
   const intl = useIntl();
-  const { userInfos } = useUserInfos();
+  const userInfos = useUserInfos();
   const [inputValue, setInputValue] = useState("");
   const [filteredBoardgames, setFilteredBoardgames] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -173,11 +173,7 @@ const MyRatings = () => {
             <div className="grid grid-cols-1 gap-4 mt-4 lg:grid-cols-3 lg:gap-4">
               {displayedBoardgames?.length > 0 &&
                 displayedBoardgames.map((bg) => (
-                  <BoardgameCard
-                    boardgame={bg}
-                    userInfos={userInfos}
-                    key={bg._id?.toString()}
-                  />
+                  <BoardgameCard boardgame={bg} key={bg._id?.toString()} />
                 ))}
             </div>
             {filteredBoardgames?.length > 12 && (

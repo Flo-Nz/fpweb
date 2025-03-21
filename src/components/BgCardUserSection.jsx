@@ -14,6 +14,7 @@ import { postUserRating, removeUserRating } from "../lib/api";
 import { useState } from "react";
 import DiscordLoginButton from "./DiscordLoginButton";
 import GoogleLoginButton from "./GoogleLoginButton";
+import { useUserInfos } from "../providers/UserInfosContext";
 
 const getUserRating = (boardgame, userId) => {
   if (!userId) {
@@ -26,7 +27,8 @@ const getUserRating = (boardgame, userId) => {
   return userRating?.rating;
 };
 
-const BgCardUserSection = ({ boardgame, userInfos }) => {
+const BgCardUserSection = ({ boardgame }) => {
+  const userInfos = useUserInfos();
   const queryClient = useQueryClient();
   const ratings = ["1", "2", "3", "4", "5"];
   const [error, setError] = useState(null);
