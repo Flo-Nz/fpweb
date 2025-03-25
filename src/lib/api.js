@@ -50,15 +50,16 @@ export const fetchUserInfos = async () => {
 
 export const searchOrop = async (query) => {
   try {
-    const value = await query.queryKey[1];
     const apikey = await getApiKey();
+    const value = await query.queryKey[1];
+    const oropOnly = await query.queryKey[2];
 
     const { data } = await axios({
       headers: { apikey },
       method: "get",
       baseURL: process.env.API_BASE_URL,
       url: "/orop/search",
-      params: { title: deburr(value) },
+      params: { title: deburr(value), oropOnly: oropOnly ? "true" : "false" },
     });
     return data;
   } catch (error) {
@@ -168,7 +169,7 @@ export const deleteBoardgame = async (id) => {
   }
 };
 
-export const getAllOrop = async ({ page }) => {
+export const getAllOrop = async ({ page = 1, oropOnly }) => {
   try {
     const apikey = await getApiKey();
     const {
@@ -177,7 +178,11 @@ export const getAllOrop = async ({ page }) => {
       headers: { apikey },
       method: "get",
       baseURL: process.env.API_BASE_URL,
-      url: `/orop/all?page=${page || 1}`,
+      url: `/orop/all?`,
+      params: {
+        page,
+        oropOnly: oropOnly ? "true" : "false",
+      },
     });
 
     return { boardgames, currentPage, totalPages, totalDocuments };
