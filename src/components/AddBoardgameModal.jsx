@@ -44,7 +44,6 @@ const AddBoardgameModal = ({ isOpen, onOpenChange }) => {
   const addBoardgameMutation = useMutation({
     mutationFn: ({ payload }) => addBoardgame(payload),
     onSuccess: ({ title }) => {
-      console.log("success !");
       setError(null);
       queryClient.invalidateQueries({
         queryKey: ["searchResults"],
@@ -57,14 +56,11 @@ const AddBoardgameModal = ({ isOpen, onOpenChange }) => {
       });
       onOpenChange(); // Close the modal here
       window.location.search = `?page=1&title=${title[0]}`;
-      console.log(window.location);
     },
     onError: ({ response }) => {
       setError(response.data);
     },
   });
-
-  console.log("error message", error);
 
   const handleAdd = useCallback(() => {
     const payload = {};
