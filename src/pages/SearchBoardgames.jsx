@@ -8,13 +8,13 @@ import {
 } from "@heroui/react";
 import { DbIcon } from "../components/Icons";
 import { FormattedMessage, useIntl } from "react-intl";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getAllOrop, searchOrop } from "../lib/api";
 import { useQuery } from "@tanstack/react-query";
 import BoardgameCard from "../components/BoardgameCard";
 import { debounce } from "lodash";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useUserInfos } from "../providers/UserInfosContext";
+import EmptyBoardgameCard from "../components/EmptyBoardgameCard";
 
 const SearchBoardgames = () => {
   const intl = useIntl();
@@ -69,11 +69,7 @@ const SearchBoardgames = () => {
     navigate(`${location.pathname}?${params.toString()}`, { replace: true });
   };
 
-  const {
-    isPending,
-    isError,
-    data: boardgames = [],
-  } = useQuery({
+  const { isPending, data: boardgames = [] } = useQuery({
     queryKey: ["searchResults", debouncedValue, oropOnly],
     queryFn: searchOrop,
     refetchOnWindowFocus: false,
@@ -82,13 +78,7 @@ const SearchBoardgames = () => {
 
   const {
     isPending: isAllOropPending,
-    isError: isAllOropError,
-    data: {
-      boardgames: allBoardgames = [],
-      page,
-      totalDocuments,
-      totalPages,
-    } = {},
+    data: { boardgames: allBoardgames = [], totalDocuments, totalPages } = {},
   } = useQuery({
     queryKey: ["allOrops", currentPage, oropOnly],
     queryFn: () => getAllOrop({ page: currentPage, oropOnly }),
@@ -130,7 +120,6 @@ const SearchBoardgames = () => {
               radius="lg"
               label={intl.formatMessage({ id: "SearchBg.InputLabel" })}
               startContent={<DbIcon size="1.4em" />}
-              autoFocus
               className="focus-input"
             />
             <Switch
@@ -203,6 +192,10 @@ const SearchBoardgames = () => {
                 boardgames.map((bg) => (
                   <BoardgameCard key={bg.id?.toString()} boardgame={bg} />
                 ))}
+              {inputValue &&
+                !isPending &&
+                !isAllOropPending &&
+                boardgames.length === 0 && <EmptyBoardgameCard />}
             </div>
           </div>
         </CardBody>

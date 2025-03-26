@@ -44,7 +44,7 @@ export const fetchUserInfos = async () => {
       }
     }
   } catch (error) {
-    console.log("[fetchUserInfos] error ", error);
+    throw error;
   }
 };
 
@@ -63,75 +63,95 @@ export const searchOrop = async (query) => {
     });
     return data;
   } catch (error) {
-    return error.message;
+    throw error;
   }
 };
 
 export const userRatings = async (query) => {
-  const apikey = await getApiKey();
+  try {
+    const apikey = await getApiKey();
 
-  const { data } = await axios({
-    headers: { apikey },
-    method: "get",
-    baseURL: process.env.API_BASE_URL,
-    url: "/discordorop/ratings",
-    params: { noLimit: true },
-  });
-  return data;
+    const { data } = await axios({
+      headers: { apikey },
+      method: "get",
+      baseURL: process.env.API_BASE_URL,
+      url: "/discordorop/ratings",
+      params: { noLimit: true },
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const postUserRating = async (title, rating) => {
-  const apikey = await getApiKey();
-  const body = { title, rating };
+  try {
+    const apikey = await getApiKey();
+    const body = { title, rating };
 
-  const { data } = await axios({
-    headers: { apikey },
-    method: "post",
-    baseURL: process.env.API_BASE_URL,
-    url:
-      apikey === process.env.YOEL_API_KEY ? "/fporop/rating" : "/discordorop",
-    data: body,
-  });
-  return data;
+    const { data } = await axios({
+      headers: { apikey },
+      method: "post",
+      baseURL: process.env.API_BASE_URL,
+      url:
+        apikey === process.env.YOEL_API_KEY ? "/fporop/rating" : "/discordorop",
+      data: body,
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const removeUserRating = async (title) => {
-  const apikey = await getApiKey();
-  const params = { title };
+  try {
+    const apikey = await getApiKey();
+    const params = { title };
 
-  const { data } = await axios({
-    headers: { apikey },
-    method: "put",
-    baseURL: process.env.API_BASE_URL,
-    url: "/discordorop/ratings/remove",
-    params,
-  });
-  return data;
+    const { data } = await axios({
+      headers: { apikey },
+      method: "put",
+      baseURL: process.env.API_BASE_URL,
+      url: "/discordorop/ratings/remove",
+      params,
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const postAskForOrop = async (title) => {
-  const apikey = await getApiKey();
-  const params = { title };
+  try {
+    const apikey = await getApiKey();
+    const params = { title };
 
-  const { data } = await axios({
-    headers: { apikey },
-    method: "post",
-    baseURL: process.env.API_BASE_URL,
-    url: "/orop/ask",
-    params,
-  });
-  return data;
+    const { data } = await axios({
+      headers: { apikey },
+      method: "post",
+      baseURL: process.env.API_BASE_URL,
+      url: "/orop/ask",
+      params,
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getTopAskedOrop = async () => {
-  const apikey = await getApiKey();
-  const { data } = await axios({
-    headers: { apikey },
-    method: "get",
-    baseURL: process.env.API_BASE_URL,
-    url: "/orop/top/asked",
-  });
-  return data;
+  try {
+    const apikey = await getApiKey();
+    const { data } = await axios({
+      headers: { apikey },
+      method: "get",
+      baseURL: process.env.API_BASE_URL,
+      url: "/orop/top/asked",
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const updateBoardgame = async (id, payload) => {
@@ -147,7 +167,7 @@ export const updateBoardgame = async (id, payload) => {
 
     return data;
   } catch (error) {
-    return error.message;
+    throw error;
   }
 };
 
@@ -164,8 +184,24 @@ export const deleteBoardgame = async (id) => {
 
     return data;
   } catch (error) {
-    console.log("error", error);
-    return error.message;
+    throw error;
+  }
+};
+
+export const addBoardgame = async (payload) => {
+  try {
+    const apikey = await getApiKey();
+    const { data } = await axios({
+      headers: { apikey },
+      method: "post",
+      baseURL: process.env.API_BASE_URL,
+      url: `/boardgame`,
+      data: payload,
+    });
+
+    return data;
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -187,7 +223,7 @@ export const getAllOrop = async ({ page = 1, oropOnly }) => {
 
     return { boardgames, currentPage, totalPages, totalDocuments };
   } catch (error) {
-    return error.message;
+    throw error;
   }
 };
 
@@ -203,6 +239,6 @@ export const getYoutubeOrop = async (id) => {
 
     return data;
   } catch (error) {
-    return error.message;
+    throw error;
   }
 };
