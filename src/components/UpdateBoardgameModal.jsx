@@ -118,7 +118,7 @@ const UpdateBoardgameModal = ({ boardgame, isOpen, onOpenChange }) => {
                     autoFocus={index === 0}
                     isRequired={index === 0}
                     isInvalid={isRequiredInvalid(index, title)}
-                    errorMessage="Veuillez entrer un titre"
+                    errorMessage={intl.formatMessage({ id: "Error.AddTitle" })}
                   />
                   <Button
                     isIconOnly
