@@ -16,6 +16,9 @@
     "BoardgamesList.Empty": "Erreur : aucun jeu trouvé. L'API serait-elle down ?",
     "BoardgamesList.Subtitle": "Parcourir librement les jeux à éditer",
     "BoardgamesList.Title": "LISTE DES JEUX",
+    "BoardgamesValidationList.Title": "Liste des jeux à valider",
+    "BoardgamesValidationList.Subtitle": "Prends le temps de valider ou supprimer ces fiches :-)",
+    "BoardgamesValidationList.Count": "{totalDocuments} JEUX A VALIDER",
     "Common.AddBoardgame": "Ajouter un jeu en base",
     "Common.AddBoardgameModal.Title": "Ajouter {title}",
     "Common.AskStatus": "Voter",
@@ -27,6 +30,7 @@
     "Common.Title": "Titre",
     "Common.Title.Alternate": "Titre alternatif {index}",
     "Common.Title.First": "Titre principal",
+    "Common.Validate": "Valider",
     "Common.Unconnected": "Non connecté",
     "Cookies.Accept": "Accepter",
     "Cookies.Decline": "Décliner",
@@ -55,6 +59,7 @@
     "MyRatings.Subtitle": "Retrouve toutes tes notes ici",
     "Nav.Boardgames": "Les jeux",
     "Nav.BoardgamesList": "Liste des jeux",
+    "Nav.BoardgamesValidationList": "Validations à réaliser",
     "Nav.Contact": "Contact",
     "Nav.DiscordLogin": "Login Discord",
     "Nav.DiscordLogout": "Se déconnecter",
@@ -91,7 +96,11 @@
     "UpdateBoardgameModal.Close": "Annuler",
     "UpdateBoardgameModal.NewTitlePlaceholder": "Titre du jeu...",
     "UpdateBoardgameModal.Save": "Enregistrer",
-    "UpdateBoardgameModal.Title": "Edition de {title}"
+    "UpdateBoardgameModal.Title": "Edition de {title}",
+    "ValidateBoardgameConfirmationmodal.Description": "As-tu bien vérifié que le jeu n'existait pas déjà en base sous un autre nom et que le jeu existe réellement ?",
+    "ValidateBoardgameConfirmationmodal.No": "Annuler",
+    "ValidateBoardgameConfirmationmodal.Title": "Validation du jeu \"{title}\"",
+    "ValidateBoardgameConfirmationmodal.Yes": "Valider"
   },
   "en": {}
 }

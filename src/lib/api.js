@@ -242,3 +242,35 @@ export const getYoutubeOrop = async (id) => {
     throw error;
   }
 };
+
+export const getPendingBoardgames = async () => {
+  try {
+    const apikey = await getApiKey();
+    const { data } = await axios({
+      headers: { apikey },
+      method: "get",
+      baseURL: process.env.API_BASE_URL,
+      url: `/boardgame/pending`,
+    });
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const validateBoardgame = async (id) => {
+  try {
+    const apikey = await getApiKey();
+    const { data } = await axios({
+      headers: { apikey },
+      method: "get",
+      baseURL: process.env.API_BASE_URL,
+      url: `/boardgame/${id}/validate`,
+    });
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

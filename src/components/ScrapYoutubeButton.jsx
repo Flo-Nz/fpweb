@@ -27,11 +27,13 @@ const ScrapYoutubeButton = ({ boardgame, addAskForOropButton = false }) => {
       queryClient.invalidateQueries({ queryKey: ["searchResults"] });
       queryClient.invalidateQueries({ queryKey: ["myRatings"] });
       queryClient.invalidateQueries({ queryKey: ["allOrops"] });
+      queryClient.invalidateQueries({ queryKey: ["pendingBoardgames"] });
     },
     onError: (err) => {
       queryClient.invalidateQueries({ queryKey: ["searchResults"] });
       queryClient.invalidateQueries({ queryKey: ["myRatings"] });
       queryClient.invalidateQueries({ queryKey: ["allOrops"] });
+      queryClient.invalidateQueries({ queryKey: ["pendingBoardgames"] });
     },
   });
 

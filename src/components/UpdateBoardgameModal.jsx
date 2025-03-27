@@ -40,6 +40,9 @@ const UpdateBoardgameModal = ({ boardgame, isOpen, onOpenChange }) => {
       queryClient.invalidateQueries({
         queryKey: ["allOrops"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["pendingBoardgames"],
+      });
     },
     onError: (err) => setError(err),
   });

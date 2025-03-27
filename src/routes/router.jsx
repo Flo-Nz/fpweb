@@ -6,6 +6,7 @@ import SearchBoardgames from "../pages/SearchBoardgames";
 import MyRatings from "../pages/MyRatings";
 import TopAskedOrop from "../pages/TopAskedOrop";
 import BoardgamesList from "../pages/BoardgamesList";
+import BoardgamesValidationList from "../pages/BoardgamesValidationList";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
         element: <Legal />,
       },
       { path: "/boardgames/list", element: <BoardgamesList /> },
+      {
+        path: "/boardgames/pending/list",
+        element: <BoardgamesValidationList />,
+      },
     ],
   },
 ]);

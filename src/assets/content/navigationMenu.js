@@ -35,6 +35,12 @@ export const mainNav = [
         path: "boardgames/list",
         scribeOnly: true,
       },
+      {
+        id: "boardgames-list",
+        title: "Nav.BoardgamesValidationList",
+        path: "boardgames/pending/list",
+        scribeOnly: true,
+      },
     ],
   },
 ];
