@@ -54,6 +54,9 @@ const AddBoardgameModal = ({ isOpen, onOpenChange }) => {
       queryClient.invalidateQueries({
         queryKey: ["allOrops"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["pendingBoardgames"],
+      });
       onOpenChange(); // Close the modal here
       window.location.search = `?page=1&title=${title[0]}`;
     },

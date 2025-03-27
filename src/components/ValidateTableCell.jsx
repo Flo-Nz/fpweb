@@ -1,10 +1,11 @@
 import { Button, TableCell, useDisclosure } from "@heroui/react";
-import { CancelIcon } from "./Icons";
+import { CancelIcon, CheckIcon } from "./Icons";
 import { FormattedMessage } from "react-intl";
 import UpdateBoardgameModal from "./UpdateBoardgameModal";
 import DeleteBoardgameConfirmationModal from "./DeleteBoardgameConfirmationModal";
+import ValidateBoardgameConfirmationModal from "./ValidateBoardgameConfirmationModal";
 
-const DeleteTableCell = ({ boardgame }) => {
+const ValidateTableCell = ({ boardgame }) => {
   const { isOpen, onOpenChange, onOpen } = useDisclosure();
   return (
     <div className="flex items-center justify-center">
@@ -13,12 +14,12 @@ const DeleteTableCell = ({ boardgame }) => {
         size="sm"
         variant="bordered"
         onPress={onOpen}
-        color="danger"
-        className="border-transparent hover:bg-red-500"
+        color="success"
+        className="border-transparent hover:bg-green-500"
       >
-        <CancelIcon size="3em" />
+        <CheckIcon size="3em" />
       </Button>
-      <DeleteBoardgameConfirmationModal
+      <ValidateBoardgameConfirmationModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         boardgame={boardgame}
@@ -27,4 +28,4 @@ const DeleteTableCell = ({ boardgame }) => {
   );
 };
 
-export default DeleteTableCell;
+export default ValidateTableCell;
