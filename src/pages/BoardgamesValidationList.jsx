@@ -197,7 +197,7 @@ const BoardgamesList = () => {
             </>
           ) : (
             <div className="pt-8 pb-8 m-auto text-xl text-red-600">
-              <FormattedMessage id="BoardgamesList.Empty" />
+              <FormattedMessage id="BoardgamesValidationList.Empty" />
             </div>
           )}
         </CardBody>
