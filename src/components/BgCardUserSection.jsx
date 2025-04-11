@@ -8,29 +8,18 @@ import {
 } from "@heroui/react";
 import { capitalize, find } from "lodash";
 import { FormattedMessage, useIntl } from "react-intl";
-import { CheckIcon, ChevronDownIcon } from "./Icons";
+import { CheckIcon, ChevronDownIcon, UsersIcon } from "./Icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postUserRating, removeUserRating } from "../lib/api";
 import { useState } from "react";
 import DiscordLoginButton from "./DiscordLoginButton";
 import GoogleLoginButton from "./GoogleLoginButton";
 import { useUserInfos } from "../providers/UserInfosContext";
-
-const getUserRating = (boardgame, userId) => {
-  if (!userId) {
-    return null;
-  }
-  const userRating = find(
-    boardgame.discordOrop?.ratings,
-    (elem) => elem.userId === userId
-  );
-  return userRating?.rating;
-};
+import { getUserRating, ratings } from "../lib/shared";
 
 const BgCardUserSection = ({ boardgame }) => {
   const userInfos = useUserInfos();
   const queryClient = useQueryClient();
-  const ratings = ["1", "2", "3", "4", "5"];
   const [error, setError] = useState(null);
   const intl = useIntl();
 
@@ -40,16 +29,18 @@ const BgCardUserSection = ({ boardgame }) => {
       setError(null);
       queryClient.invalidateQueries({ queryKey: ["searchResults"] });
       queryClient.invalidateQueries({ queryKey: ["myRatings"] });
+      queryClient.invalidateQueries({ queryKey: ["allOrops"] });
     },
     onError: (err) => setError(err),
   });
 
   const removeRating = useMutation({
-    mutationFn: ({ title }) => removeUserRating(title),
+    mutationFn: ({ title }) => removeUserRating({ title, rating: "true" }),
     onSuccess: () => {
       setError(null);
       queryClient.invalidateQueries({ queryKey: ["searchResults"] });
       queryClient.invalidateQueries({ queryKey: ["myRatings"] });
+      queryClient.invalidateQueries({ queryKey: ["allOrops"] });
     },
     onError: (err) => setError(err),
   });
@@ -72,12 +63,15 @@ const BgCardUserSection = ({ boardgame }) => {
       </div>
     );
   }
-  const { username, userId } = userInfos;
+  const { username, userId, avatar } = userInfos;
   const userRating = getUserRating(boardgame, userId);
 
   return (
     <div className="mt-2">
-      <h1 className="font-semibold">{capitalize(username)}</h1>
+      <div className="flex flex-row items-center mb-2 gap-2">
+        {avatar ? <Image src={avatar} width={30} /> : <UsersIcon size="2em" />}
+        <h1 className="font-semibold">{capitalize(username)}</h1>
+      </div>
       <div className="flex flex-row items-center">
         <div>
           <Dropdown showArrow backdrop="blur">

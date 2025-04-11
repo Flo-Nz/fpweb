@@ -14,6 +14,7 @@ import {
   CancelIcon,
   CartIcon,
   EditIcon,
+  ReviewIcon,
   UsersIcon,
   YoutubeIcon,
 } from "./Icons";
@@ -27,6 +28,7 @@ import UpdateBoardgameModal from "./UpdateBoardgameModal";
 import DeleteBoardgameConfirmationModal from "./DeleteBoardgameConfirmationModal";
 import ScrapYoutubeButton from "./ScrapYoutubeButton";
 import { useUserInfos } from "../providers/UserInfosContext";
+import BoardgameCommentsModal from "./BoardgameCommentsModal";
 
 const BoardgameCard = ({ boardgame }) => {
   const userInfos = useUserInfos();
@@ -45,8 +47,17 @@ const BoardgameCard = ({ boardgame }) => {
     onOpen: onDeleteModalOpen,
     onOpenChange: onDeleteModalOpenChange,
   } = useDisclosure();
+  const {
+    isOpen: isReviewModalOpen,
+    onOpen: onReviewModalOpen,
+    onOpenChange: onReviewModalOpenChange,
+  } = useDisclosure();
 
   const editionEnabled = userCanEdit(userInfos?.discordRoles);
+
+  const commentCount =
+    boardgame.discordOrop?.ratings?.filter((rating) => rating.comment)
+      ?.length ?? 0;
 
   return (
     <Card
@@ -57,7 +68,29 @@ const BoardgameCard = ({ boardgame }) => {
     >
       <CardHeader>
         <div className="w-full">
-          <h1 className="font-semibold">{toUpper(title[0])}</h1>
+          <div className="flex flex-row justify-between">
+            <h1 className="font-semibold">{toUpper(title[0])}</h1>
+            <Button
+              className="animate-background-gradient font-semibold"
+              size="sm"
+              onPress={onReviewModalOpen}
+            >
+              <ReviewIcon size="2em" />
+              <div className="hidden lg:flex">
+                <FormattedMessage
+                  id="BgCard.ViewReviews"
+                  values={{
+                    commentCount,
+                  }}
+                />
+              </div>
+            </Button>
+            <BoardgameCommentsModal
+              isOpen={isReviewModalOpen}
+              boardgame={boardgame}
+              onOpenChange={onReviewModalOpenChange}
+            />
+          </div>
           <div className="flex flex-row justify-between mt-2">
             <div className="flex flex-row ml-0 mt-auto mb-auto">
               <Image src="/yoel.jpg" width={30} />

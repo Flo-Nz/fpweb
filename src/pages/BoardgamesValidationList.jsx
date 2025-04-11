@@ -30,7 +30,7 @@ import { differenceInDays } from "date-fns";
 import ScrapYoutubeButton from "../components/ScrapYoutubeButton";
 import ValidateTableCell from "../components/ValidateTableCell";
 
-const BoardgamesList = () => {
+const BoardgamesValidationList = () => {
   const [error, setError] = useState();
 
   const {
@@ -54,11 +54,11 @@ const BoardgamesList = () => {
           <CardBody>
             <div className="flex flex-col gap-0 text-center">
               <h1 className="font-medium text-xl font-semibold">
-                <FormattedMessage id="BoardgamesList.Pending.Title" />
+                <FormattedMessage id="BoardgamesValidationList.Subtitle" />
               </h1>
               <p className="gap-0 text-small italic text-center">
                 <i>
-                  <FormattedMessage id="BoardgamesList.Pending.Subtitle" />
+                  <FormattedMessage id="BoardgamesValidationList.Subtitle" />
                 </i>
               </p>
             </div>
@@ -206,4 +206,4 @@ const BoardgamesList = () => {
   );
 };
 
-export default memo(BoardgamesList);
+export default memo(BoardgamesValidationList);

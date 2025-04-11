@@ -26,16 +26,16 @@ export const fetchUserInfos = async () => {
       headers: { apikey },
     });
     if (user?.data) {
-      const { _id, username, type, discord, google } = user.data;
+      const { _id, username, type, discord, google, avatar } = user.data;
       await setItem("id", _id.toString());
+      await setItem("username", username);
+      await setItem("avatar", avatar);
       switch (type) {
         case "discord":
-          await setItem("username", username);
           await setItem("discordRoles", discord.roles);
           await setItem("userId", discord.id);
           return;
         case "google":
-          await setItem("username", username);
           await setItem("discordRoles", []);
           await setItem("userId", google.id);
           return;
@@ -84,10 +84,10 @@ export const userRatings = async (query) => {
   }
 };
 
-export const postUserRating = async (title, rating) => {
+export const postUserRating = async (title, rating, comment) => {
   try {
     const apikey = await getApiKey();
-    const body = { title, rating };
+    const body = { title, rating, comment };
 
     const { data } = await axios({
       headers: { apikey },
@@ -103,10 +103,10 @@ export const postUserRating = async (title, rating) => {
   }
 };
 
-export const removeUserRating = async (title) => {
+export const removeUserRating = async ({ title, rating, comment }) => {
   try {
     const apikey = await getApiKey();
-    const params = { title };
+    const params = { title, rating, comment };
 
     const { data } = await axios({
       headers: { apikey },
@@ -174,7 +174,6 @@ export const updateBoardgame = async (id, payload) => {
 export const deleteBoardgame = async (id) => {
   try {
     const apikey = await getApiKey();
-    console.log("api key", apikey);
     const { data } = await axios({
       headers: { apikey },
       method: "delete",
