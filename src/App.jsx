@@ -29,6 +29,8 @@ const App = () => {
     userId: null,
     discordRoles: [],
     apikey: null,
+    avatar: null,
+    username: null,
   });
   const [searchParams, setSearchParams] = useSearchParams();
   const userJwt = searchParams.get("jwt");

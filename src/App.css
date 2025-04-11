@@ -43,6 +43,18 @@ header {
   animation: gradient 5s ease infinite;
 }
 
+.animate-background-gradient:hover {
+  background-size: 200% 200%;
+  animation: gradient 5s ease infinite;
+  background-image: linear-gradient(
+    45deg,
+    rgb(59 130 246) 0%,
+    /* blue-500 */ rgb(236 72 153) 50%,
+    /* pink-500 */ rgb(59 130 246) 100% /* blue-500 */
+  );
+  color: white;
+}
+
 @media screen and (max-width: 600px) {
   #root {
     width: 100%;

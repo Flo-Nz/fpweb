@@ -19,6 +19,8 @@ export const getUserApiKey = async () => getItem("apikey");
 
 export const getUsername = async () => getItem("username");
 
+export const getAvatar = async () => getItem("avatar");
+
 export const logoutUser = async () =>
   clear()
     .then(console.log("Localforage is now empty"))
@@ -31,7 +33,8 @@ export const getUserInfos = async () => {
   const apikey = await getUserApiKey();
   const id = await getId();
   const username = await getUsername();
-  return { isLogged, userId, discordRoles, apikey, id, username };
+  const avatar = await getAvatar();
+  return { isLogged, userId, discordRoles, apikey, id, username, avatar };
 };
 
 export const userCanEdit = (discordRoles) => {

@@ -20,6 +20,7 @@ import {
   DiscordIcon,
   FacebookIcon,
   InstagramIcon,
+  UsersIcon,
   YoutubeIcon,
 } from "./Icons";
 import { mainNav } from "../assets/content/navigationMenu";
@@ -254,6 +255,11 @@ const NavBar = () => {
                     logoutUser();
                   }}
                 >
+                  {userInfos?.avatar ? (
+                    <Image src={userInfos?.avatar} width={30} />
+                  ) : (
+                    <UsersIcon size="2em" />
+                  )}
                   <FormattedMessage id="Nav.DiscordLogout" />
                 </Button>
               </Link>
@@ -311,7 +317,14 @@ const NavBar = () => {
                   logoutUser();
                 }}
               >
-                <FormattedMessage id="Nav.DiscordLogout" />
+                <div className="flex flex-row items-center gap-2 text-red-300">
+                  {userInfos?.avatar ? (
+                    <Image src={userInfos?.avatar} width={30} />
+                  ) : (
+                    <UsersIcon size="2em" />
+                  )}
+                  <FormattedMessage id="Nav.DiscordLogout" />
+                </div>
               </Link>
             </NavbarMenuItem>
           )}
