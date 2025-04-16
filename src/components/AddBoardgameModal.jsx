@@ -28,7 +28,6 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { filter } from "lodash";
 import { useUserInfos } from "../providers/UserInfosContext";
 import { addBoardgame } from "../lib/api";
-import { useLocation, useNavigate } from "react-router-dom";
 
 const AddBoardgameModal = ({ isOpen, onOpenChange }) => {
   const queryClient = useQueryClient();

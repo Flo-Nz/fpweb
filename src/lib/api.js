@@ -84,10 +84,10 @@ export const userRatings = async (query) => {
   }
 };
 
-export const postUserRating = async (title, rating, comment) => {
+export const postUserRating = async (title, rating, review) => {
   try {
     const apikey = await getApiKey();
-    const body = { title, rating, comment };
+    const body = { title, rating, review };
 
     const { data } = await axios({
       headers: { apikey },
@@ -103,10 +103,10 @@ export const postUserRating = async (title, rating, comment) => {
   }
 };
 
-export const removeUserRating = async ({ title, rating, comment }) => {
+export const removeUserRating = async ({ title, rating, review }) => {
   try {
     const apikey = await getApiKey();
-    const params = { title, rating, comment };
+    const params = { title, rating, review };
 
     const { data } = await axios({
       headers: { apikey },
@@ -266,6 +266,27 @@ export const validateBoardgame = async (id) => {
       method: "get",
       baseURL: process.env.API_BASE_URL,
       url: `/boardgame/${id}/validate`,
+    });
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getBoardgame = async (id, options = {}) => {
+  try {
+    const apikey = await getApiKey();
+    const queryString = new URLSearchParams(options).toString();
+    const url = queryString
+      ? `/boardgame/${id}?${queryString}`
+      : `/boardgame/${id}`;
+
+    const { data } = await axios({
+      headers: { apikey },
+      method: "get",
+      baseURL: process.env.API_BASE_URL,
+      url,
     });
 
     return data;
