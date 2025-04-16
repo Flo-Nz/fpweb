@@ -93,6 +93,7 @@ const BoardgameReviewsModal = ({ boardgameId, isOpen, onOpenChange }) => {
       queryClient.invalidateQueries({ queryKey: ["searchResults"] });
       queryClient.invalidateQueries({ queryKey: ["myRatings"] });
       queryClient.invalidateQueries({ queryKey: ["allOrops"] });
+      onOpenChange(false);
     },
     onError: (err) => setError(err),
   });
