@@ -28,11 +28,7 @@ import UpdateBoardgameModal from "./UpdateBoardgameModal";
 import DeleteBoardgameConfirmationModal from "./DeleteBoardgameConfirmationModal";
 import ScrapYoutubeButton from "./ScrapYoutubeButton";
 import { useUserInfos } from "../providers/UserInfosContext";
-<<<<<<< HEAD
 import BoardgameReviewsModal from "./BoardgameReviewsModal";
-=======
-import BoardgameCommentsModal from "./BoardgameCommentsModal";
->>>>>>> 22005befd91962a7990c5dc0d2d4a73d3ad4a292
 
 const BoardgameCard = ({ boardgame }) => {
   const userInfos = useUserInfos();
