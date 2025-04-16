@@ -121,6 +121,24 @@ export const removeUserRating = async ({ title, rating, review }) => {
   }
 };
 
+export const removeReview = async ({ userId, title }) => {
+  try {
+    const apikey = await getApiKey();
+    const params = { userId, title };
+
+    const { data } = await axios({
+      headers: { apikey },
+      method: "put",
+      baseURL: process.env.API_BASE_URL,
+      url: "/discordorop/reviews/remove",
+      params,
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const postAskForOrop = async (title) => {
   try {
     const apikey = await getApiKey();

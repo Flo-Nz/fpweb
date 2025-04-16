@@ -28,9 +28,10 @@ import {
   removeReview,
 } from "../lib/api";
 import { useUserInfos } from "../providers/UserInfosContext";
-import { getUserRating, ratings, userCanEdit } from "../lib/shared";
+import { getUserRating, ratings } from "../lib/shared";
 import GoogleLoginButton from "./GoogleLoginButton";
 import DiscordLoginButton from "./DiscordLoginButton";
+import { userCanEdit } from "../lib/user";
 
 const BoardgameReviewsModal = ({ boardgameId, isOpen, onOpenChange }) => {
   const [newReview, setNewReview] = useState("");
