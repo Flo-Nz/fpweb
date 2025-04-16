@@ -276,26 +276,20 @@ const BoardgameReviewsModal = ({ boardgameId, isOpen, onOpenChange }) => {
                               <EditIcon size="1.5em" />
                             </Button>
                           )}
-                          {rating.userId === userInfos?.userId && (
+                          {(rating.userId === userInfos?.userId ||
+                            userCanEdit(userInfos?.discordRoles)) && (
                             <Button
                               isIconOnly
                               color="danger"
                               variant="light"
                               size="sm"
-                              onPress={handleDeleteReview}
-                            >
-                              <TrashIcon size="1.5em" />
-                            </Button>
-                          )}
-                          {userCanEdit(userInfos?.discordRoles) && (
-                            <Button
-                              isIconOnly
-                              color="danger"
-                              variant="light"
-                              size="sm"
-                              onPress={() =>
-                                handleScribeDeleteReview(rating.userId)
-                              }
+                              onPress={() => {
+                                if (rating.userId === userInfos?.userId) {
+                                  handleDeleteReview();
+                                } else {
+                                  handleScribeDeleteReview(rating.userId);
+                                }
+                              }}
                             >
                               <TrashIcon size="1.5em" />
                             </Button>
