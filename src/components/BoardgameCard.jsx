@@ -28,7 +28,7 @@ import UpdateBoardgameModal from "./UpdateBoardgameModal";
 import DeleteBoardgameConfirmationModal from "./DeleteBoardgameConfirmationModal";
 import ScrapYoutubeButton from "./ScrapYoutubeButton";
 import { useUserInfos } from "../providers/UserInfosContext";
-import BoardgameCommentsModal from "./BoardgameCommentsModal";
+import BoardgameReviewsModal from "./BoardgameReviewsModal";
 
 const BoardgameCard = ({ boardgame }) => {
   const userInfos = useUserInfos();
@@ -55,9 +55,9 @@ const BoardgameCard = ({ boardgame }) => {
 
   const editionEnabled = userCanEdit(userInfos?.discordRoles);
 
-  const commentCount =
-    boardgame.discordOrop?.ratings?.filter((rating) => rating.comment)
-      ?.length ?? 0;
+  const reviewsCount =
+    boardgame.discordOrop?.ratings?.filter((rating) => rating.review)?.length ||
+    0;
 
   return (
     <Card
@@ -80,14 +80,14 @@ const BoardgameCard = ({ boardgame }) => {
                 <FormattedMessage
                   id="BgCard.ViewReviews"
                   values={{
-                    commentCount,
+                    reviewsCount,
                   }}
                 />
               </div>
             </Button>
-            <BoardgameCommentsModal
+            <BoardgameReviewsModal
               isOpen={isReviewModalOpen}
-              boardgame={boardgame}
+              boardgameId={boardgame._id}
               onOpenChange={onReviewModalOpenChange}
             />
           </div>
