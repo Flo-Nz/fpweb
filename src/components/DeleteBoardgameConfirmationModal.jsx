@@ -27,6 +27,7 @@ const DeleteBoardgameConfirmationModal = ({
       queryClient.invalidateQueries({ queryKey: ["searchResults"] });
       queryClient.invalidateQueries({ queryKey: ["myRatings"] });
       queryClient.invalidateQueries({ queryKey: ["allOrops"] });
+      queryClient.invalidateQueries({ queryKey: ["pendingBoardgames"] });
     },
     onError: (err) => setError(err),
   });
