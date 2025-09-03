@@ -84,6 +84,7 @@ const BoardgameCard = ({ boardgame }) => {
                   }}
                 />
               </div>
+              <span className="lg:hidden">{reviewsCount}</span>
             </Button>
             <BoardgameReviewsModal
               isOpen={isReviewModalOpen}
