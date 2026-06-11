@@ -1,11 +1,11 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Spinner } from "@heroui/react";
-import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useIntl } from "react-intl";
-import { searchOrop, getAllOrop } from "../lib/api";
+import { searchOrop, getAllOrop, addBoardgame } from "../lib/api";
 import { useUser } from "../context/UserContext";
 import BoardgameCard from "../components/BoardgameCard";
-import { DbIcon, NotFoundIcon } from "../components/icons/Icons";
+import { DbIcon, NotFoundIcon, AddIcon } from "../components/icons/Icons";
 import { debounce } from "lodash-es";
 
 const PAGE_SIZE = 24;
@@ -13,6 +13,7 @@ const PAGE_SIZE = 24;
 const SearchPage = () => {
   const intl = useIntl();
   const { user } = useUser();
+  const queryClient = useQueryClient();
   const [mode, setMode] = useState("search"); // "search" | "browse"
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -20,7 +21,16 @@ const SearchPage = () => {
   const [fpRating, setFpRating] = useState(null);
   const [discordRating, setDiscordRating] = useState(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [addedSuccess, setAddedSuccess] = useState(false);
   const observerRef = useRef(null);
+
+  const addMutation = useMutation({
+    mutationFn: (title) => addBoardgame(title),
+    onSuccess: () => {
+      setAddedSuccess(true);
+      queryClient.invalidateQueries({ queryKey: ["search"] });
+    },
+  });
 
   const debouncedSetSearch = useCallback(
     debounce((value) => setDebouncedSearch(value), 400),
@@ -30,6 +40,7 @@ const SearchPage = () => {
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchValue(value);
+    setAddedSuccess(false);
     debouncedSetSearch(value);
   };
 
@@ -186,6 +197,26 @@ const SearchPage = () => {
               <p className="text-foreground/50">
                 {intl.formatMessage({ id: "search.noResults" })}
               </p>
+              {user.isLogged && !addedSuccess && (
+                <button
+                  onClick={() => addMutation.mutate(debouncedSearch)}
+                  disabled={addMutation.isPending}
+                  className="flex cursor-pointer items-center gap-2 rounded-lg bg-fp-green px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                >
+                  <AddIcon size="18" />
+                  {addMutation.isPending ? "Ajout..." : `Ajouter "${debouncedSearch}"`}
+                </button>
+              )}
+              {addedSuccess && (
+                <p className="text-sm text-fp-green">
+                  ✓ Jeu ajouté ! Il sera visible après validation par un scribe.
+                </p>
+              )}
+              {addMutation.isError && (
+                <p className="text-sm text-fp-rose">
+                  {addMutation.error?.response?.data?.error || "Erreur lors de l'ajout"}
+                </p>
+              )}
             </div>
           )}
 

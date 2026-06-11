@@ -126,3 +126,13 @@ export const fetchBggCover = async (id) => {
   });
   return data;
 };
+
+// Add a new boardgame
+export const addBoardgame = async (title) => {
+  const { data } = await api({
+    method: "post",
+    url: "/boardgame",
+    data: { title: [title.toLowerCase()] },
+  });
+  return data;
+};
