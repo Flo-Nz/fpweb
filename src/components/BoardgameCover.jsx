@@ -9,12 +9,12 @@ const BoardgameCover = ({ boardgame, size = "md" }) => {
   // If coverUrl is already in the boardgame data, use it directly
   const cachedUrl = boardgame.coverUrl || boardgame.thumbnailUrl;
 
-  // Only fetch from API if no cached cover
+  // Only fetch from API on the detail page (size="lg"), not in lists
   const { data } = useQuery({
     queryKey: ["cover", id],
     queryFn: () => fetchBggCover(id),
-    enabled: !cachedUrl && !!id,
-    staleTime: Infinity, // Cover never changes
+    enabled: !cachedUrl && !!id && size === "lg",
+    staleTime: Infinity,
     retry: false,
   });
 
