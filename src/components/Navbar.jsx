@@ -1,365 +1,192 @@
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useIntl } from "react-intl";
+import { useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
+import { useUser } from "../context/UserContext";
+import { canEdit } from "../lib/auth";
 import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Image,
-  Link,
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  NavbarMenu,
-  NavbarMenuItem,
-  NavbarMenuToggle,
-} from "@heroui/react";
-import { useLocation, useNavigate } from "react-router-dom";
-import {
-  ChevronDownIcon,
+  DbIcon,
+  MyRatingsIcon,
   DiscordIcon,
+  CheckIcon,
   FacebookIcon,
   InstagramIcon,
-  UsersIcon,
   YoutubeIcon,
-} from "./Icons";
-import { mainNav } from "../assets/content/navigationMenu";
-import { useState } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
-import { logoutUser, userCanEdit } from "../lib/user";
-import GoogleLoginButton from "./GoogleLoginButton";
-import DiscordLoginButton from "./DiscordLoginButton";
-import { useUserInfos } from "../providers/UserInfosContext";
+  GoogleIcon,
+} from "./icons/Icons";
+import ThemeToggle from "./ThemeToggle";
 
-const icons = {
-  chevron: <ChevronDownIcon size={16} />,
-};
+const SocialLinks = () => (
+  <div className="hidden items-center gap-1 md:flex">
+    <a
+      href="https://www.facebook.com/FirstPlayerFR/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="rounded-lg p-1.5 opacity-60 transition-opacity hover:opacity-100"
+      title="Facebook"
+    >
+      <FacebookIcon size="22" />
+    </a>
+    <a
+      href="https://www.instagram.com/firstplayerfr/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="rounded-lg p-1.5 opacity-60 transition-opacity hover:opacity-100"
+      title="Instagram"
+    >
+      <InstagramIcon size="22" />
+    </a>
+    <a
+      href="https://www.youtube.com/@FirstPlayerFr"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="rounded-lg p-1.5 opacity-60 transition-opacity hover:opacity-100"
+      title="YouTube"
+    >
+      <YoutubeIcon size="22" />
+    </a>
+    <a
+      href="https://discord.gg/numWSwhHkW"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="rounded-lg p-1.5 opacity-60 transition-opacity hover:opacity-100"
+      title="Discord"
+    >
+      <DiscordIcon size="22" />
+    </a>
+  </div>
+);
 
-const NavBar = () => {
-  const userInfos = useUserInfos();
+const Navbar = () => {
   const intl = useIntl();
+  const { user, logout } = useUser();
   const location = useLocation();
   const navigate = useNavigate();
-  const currentLocation = location.pathname.split("/")?.[1];
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isLogged } = userInfos;
-  const editionEnabled = userCanEdit(userInfos?.discordRoles);
+
+  const isActive = (path) => location.pathname === path;
+
+  const googleLogin = useGoogleLogin({
+    flow: "auth-code",
+    onSuccess: async (codeResponse) => {
+      const response = await axios.post(
+        `${process.env.API_BASE_URL}/google/login`,
+        { code: codeResponse.code }
+      );
+      if (response?.data?.jwt) {
+        navigate(`/?jwt=${response.data.jwt}`);
+        window.location.reload();
+      }
+    },
+    onError: (error) => console.error("[Google Login]", error),
+  });
 
   return (
-    <>
-      <Navbar
-        key={"main-navbar"}
-        onMenuOpenChange={setIsMenuOpen}
-        className="justify-start w-full max-w-[100%]"
-      >
-        <NavbarContent className="text-white">
-          <NavbarMenuToggle
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            className="lg:hidden"
-          />
-          <NavbarBrand key={"navbar-brand"}>
-            <Link href="/">
-              <Image
-                src="/logo.png"
-                alt="logo"
-                isZoomed
-                width={100}
-                className="logo hidden md:flex lg:flex"
-              />
-              <h1 className="font-semibold text-2xl ml-4 lg:ml-0">
-                FIRSTPLAYER
-              </h1>
-            </Link>
-          </NavbarBrand>
-          <NavbarContent
-            key={"center-content"}
-            variant={"underline"}
-            gap={"$3xl"}
-            className="flex"
-          >
-            <div className="flex w-full justify-between items-center">
-              <div className="hidden lg:flex">
-                <div className="flex-col text-center mt-2 lg:flex lg:flex-row lg:mt-0">
-                  <Link
-                    href="https://www.facebook.com/FirstPlayerFR/"
-                    target="_blank"
-                  >
-                    <Button
-                      isIconOnly
-                      variant="bordered"
-                      className="border-transparent"
-                    >
-                      <FacebookIcon />
-                    </Button>
-                  </Link>
-                  <Link
-                    href="https://www.instagram.com/firstplayerfr/"
-                    target="_blank"
-                    className="ml-2"
-                  >
-                    <Button
-                      isIconOnly
-                      variant="bordered"
-                      className="border-transparent"
-                    >
-                      <InstagramIcon />
-                    </Button>
-                  </Link>
-                  <Link
-                    href="https://www.youtube.com/@FirstPlayerFr"
-                    target="_blank"
-                    className="ml-2"
-                  >
-                    <Button
-                      isIconOnly
-                      variant="bordered"
-                      className="border-transparent"
-                    >
-                      <YoutubeIcon />
-                    </Button>
-                  </Link>
-                  <Link
-                    href="https://discord.gg/numWSwhHkW"
-                    target="_blank"
-                    className="ml-2"
-                  >
-                    <Button
-                      isIconOnly
-                      variant="bordered"
-                      className="border-transparent"
-                    >
-                      <DiscordIcon />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </NavbarContent>
-        </NavbarContent>
-        <NavbarContent
-          key={"center-content"}
-          variant={"underline"}
-          gap={"$3xl"}
-          className="hidden lg:flex"
-        >
-          {mainNav.map((nav) => (
-            <div key={nav.id}>
-              {nav.elements ? (
-                <Dropdown key={nav.id}>
-                  <NavbarItem
-                    key={nav.id}
-                    isActive={currentLocation === nav.id}
-                    className="mr-4"
-                  >
-                    <DropdownTrigger key={nav.id}>
-                      <Button
-                        disableRipple
-                        className={`text-lg font-semibold`}
-                        endContent={icons.chevron}
-                        radius="lg"
-                        key={nav.id}
-                      >
-                        <FormattedMessage id={nav.title} key={nav.title} />
-                      </Button>
-                    </DropdownTrigger>
-                  </NavbarItem>
-                  <DropdownMenu
-                    aria-label="Boardgames"
-                    className="w-[340px] bg-neutral-200"
-                    itemClasses={{
-                      base: "gap-4",
-                    }}
-                    key={nav.id}
-                  >
-                    {nav.elements.map((elem) => (
-                      <>
-                        {elem.scribeOnly && editionEnabled && (
-                          <DropdownItem
-                            key={elem.id}
-                            description={
-                              elem?.description
-                                ? intl.formatMessage({
-                                    id: elem.description,
-                                  })
-                                : ""
-                            }
-                            startContent={icons[elem.icon]}
-                            onPress={() => navigate(elem.path)}
-                          >
-                            <FormattedMessage
-                              id={elem.title}
-                              key={elem.title}
-                            />
-                          </DropdownItem>
-                        )}
-                        {!elem.scribeOnly && (
-                          <DropdownItem
-                            key={elem.id}
-                            description={
-                              elem?.description
-                                ? intl.formatMessage({
-                                    id: elem.description,
-                                  })
-                                : ""
-                            }
-                            startContent={icons[elem.icon]}
-                            onPress={() => navigate(elem.path)}
-                          >
-                            <FormattedMessage
-                              id={elem.title}
-                              key={elem.title}
-                            />
-                          </DropdownItem>
-                        )}
-                      </>
-                    ))}
-                  </DropdownMenu>
-                </Dropdown>
-              ) : (
-                <>
-                  {nav.id !== "home" && (
-                    <NavbarItem
-                      key={nav.id}
-                      isActive={currentLocation === nav.id}
-                      className="mr-4"
-                    >
-                      <Link
-                        key={nav.id}
-                        itemID={nav.id}
-                        href={nav.url ?? `/${nav.path}`}
-                      >
-                        <FormattedMessage id={nav.title} key={nav.title} />
-                      </Link>
-                    </NavbarItem>
-                  )}
-                </>
-              )}
-            </div>
-          ))}
-          {!isLogged && (
-            <>
-              <NavbarMenuItem key="login-discord" className="mr-4">
-                <DiscordLoginButton size={"2em"} />
-              </NavbarMenuItem>
-              <NavbarMenuItem key="login-google" className="mr-4">
-                <GoogleLoginButton size={"2em"} />
-              </NavbarMenuItem>
-            </>
-          )}
-          {isLogged && (
-            <NavbarItem key="logout-discord" className="mr-4">
-              <Link href="/">
-                <Button
-                  className="border-solid border-2 bg-slate-200 border-indigo-500 text-indigo-500 font-semibold"
-                  onPress={() => {
-                    logoutUser();
-                  }}
-                >
-                  {userInfos?.avatar ? (
-                    <Image src={userInfos?.avatar} width={30} />
-                  ) : (
-                    <UsersIcon size="2em" />
-                  )}
-                  <FormattedMessage id="Nav.DiscordLogout" />
-                </Button>
-              </Link>
-            </NavbarItem>
-          )}
-        </NavbarContent>
-        <NavbarMenu className="pt-8">
-          {mainNav.map((nav, index) => (
-            <div key={nav.id}>
-              {nav.elements ? (
-                <>
-                  {nav.elements.map((elem) => (
-                    <NavbarMenuItem
-                      key={elem.id + index}
-                      isActive={currentLocation === nav.id}
-                    >
-                      <Link
-                        key={elem.id + index}
-                        itemID={elem.id}
-                        href={`/${elem.path}`}
-                      >
-                        <FormattedMessage id={elem.title} key={elem.title} />
-                      </Link>
-                    </NavbarMenuItem>
-                  ))}
-                </>
-              ) : (
-                <NavbarMenuItem
-                  key={nav.id + index}
-                  isActive={currentLocation === nav.id}
-                  className="mr-4"
-                >
-                  <Link key={nav.id} itemID={nav.id} href={`/${nav.path}`}>
-                    <FormattedMessage id={nav.title} key={nav.title} />
-                  </Link>
-                </NavbarMenuItem>
-              )}
-            </div>
-          ))}
-          {!isLogged && (
-            <>
-              <NavbarMenuItem key="login-discord" className="mr-4">
-                <DiscordLoginButton size={"1.5em"} />
-              </NavbarMenuItem>
-              <NavbarMenuItem key="login-google" className="mr-4">
-                <GoogleLoginButton size={"1.5em"} />
-              </NavbarMenuItem>
-            </>
-          )}
-          {isLogged && (
-            <NavbarMenuItem key="logout-discord" className="mr-4">
-              <Link
-                href="/"
-                onPress={(event) => {
-                  logoutUser();
-                }}
-              >
-                <div className="flex flex-row items-center gap-2 text-red-300">
-                  {userInfos?.avatar ? (
-                    <Image src={userInfos?.avatar} width={30} />
-                  ) : (
-                    <UsersIcon size="2em" />
-                  )}
-                  <FormattedMessage id="Nav.DiscordLogout" />
-                </div>
-              </Link>
-            </NavbarMenuItem>
-          )}
-        </NavbarMenu>
-      </Navbar>
-      <div className="lg:hidden">
-        <div className="flex flex-row justify-center lg:hidden">
-          <Link href="https://www.facebook.com/FirstPlayerFR/" target="_blank">
-            <FacebookIcon fill="black" size={32} />
+    <header className="sticky top-0 z-50 border-b border-divider bg-background/80 backdrop-blur-md">
+      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+        {/* Brand + social */}
+        <div className="flex items-center gap-4">
+          <Link to="/" className="flex items-center gap-2 no-underline">
+            <img src="/logo.png" alt="First Player" className="h-8 w-8" />
+            <span className="text-xl font-bold text-fp-purple">First Player</span>
           </Link>
-          <Link
-            href="https://www.instagram.com/firstplayerfr/"
-            target="_blank"
-            className="ml-1"
-          >
-            <InstagramIcon fill="black" size={32} />
-          </Link>
-          <Link
-            href="https://www.youtube.com/@FirstPlayerFr"
-            target="_blank"
-            className="ml-1"
-          >
-            <YoutubeIcon fill="black" size={32} />
-          </Link>
-          <Link
-            href="https://discord.gg/numWSwhHkW"
-            target="_blank"
-            className="ml-1"
-          >
-            <DiscordIcon fill="black" size={32} />
-          </Link>
+          <SocialLinks />
         </div>
-      </div>
-    </>
+
+        {/* Nav links */}
+        <div className="flex items-center gap-1">
+          <Link
+            to="/"
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium no-underline transition-colors ${
+              isActive("/")
+                ? "bg-content2 text-foreground"
+                : "text-foreground/50 hover:bg-content2 hover:text-foreground"
+            }`}
+          >
+            <DbIcon size="20" />
+            <span className="hidden sm:inline">
+              {intl.formatMessage({ id: "nav.search" })}
+            </span>
+          </Link>
+          {user.isLogged && (
+            <Link
+              to="/my-ratings"
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium no-underline transition-colors ${
+                isActive("/my-ratings")
+                  ? "bg-content2 text-foreground"
+                  : "text-foreground/50 hover:bg-content2 hover:text-foreground"
+              }`}
+            >
+              <MyRatingsIcon size="20" />
+              <span className="hidden sm:inline">
+                {intl.formatMessage({ id: "nav.myRatings" })}
+              </span>
+            </Link>
+          )}
+          {user.isLogged && canEdit(user.discordRoles) && (
+            <Link
+              to="/pending"
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium no-underline transition-colors ${
+                isActive("/pending")
+                  ? "bg-content2 text-foreground"
+                  : "text-foreground/50 hover:bg-content2 hover:text-foreground"
+              }`}
+            >
+              <CheckIcon size="20" />
+              <span className="hidden sm:inline">Validation</span>
+            </Link>
+          )}
+        </div>
+
+        {/* Right: theme + auth */}
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          {user.isLogged ? (
+            <div className="flex items-center gap-3">
+              <span className="hidden text-sm font-medium text-foreground/70 sm:inline">
+                {user.username}
+              </span>
+              {user.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={user.username}
+                  className="h-8 w-8 rounded-full border-2 border-divider object-cover"
+                />
+              ) : (
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-content2 text-xs font-bold text-foreground/70">
+                  {user.username?.charAt(0)?.toUpperCase() || "?"}
+                </div>
+              )}
+              <button
+                onClick={logout}
+                className="cursor-pointer rounded-lg px-2 py-1 text-xs text-foreground/50 transition-colors hover:bg-danger/10 hover:text-danger"
+              >
+                {intl.formatMessage({ id: "nav.logout" })}
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              {/* Discord login */}
+              <a
+                href={process.env.DISCORD_OAUTH_URL}
+                className="flex items-center gap-1.5 rounded-lg bg-fp-purple px-3 py-2 text-xs font-medium text-white no-underline transition-opacity hover:opacity-90"
+              >
+                <DiscordIcon size="16" />
+                <span className="hidden sm:inline">Discord</span>
+              </a>
+              {/* Google login */}
+              <button
+                onClick={() => googleLogin()}
+                className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-divider bg-content1 px-3 py-2 text-xs font-medium text-foreground/70 transition-colors hover:bg-content2"
+              >
+                <GoogleIcon size="16" />
+                <span className="hidden sm:inline">Google</span>
+              </button>
+            </div>
+          )}
+        </div>
+      </nav>
+    </header>
   );
 };
 
-export default NavBar;
+export default Navbar;

@@ -1,15 +1,12 @@
-import PropTypes from "prop-types";
+import Navbar from "./Navbar";
 
 const Layout = ({ children }) => {
   return (
-    <div id="layout" className="mt-2">
-      {children}
+    <div>
+      <Navbar />
+      <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
     </div>
   );
-};
-
-Layout.propTypes = {
-  children: PropTypes.any,
 };
 
 export default Layout;

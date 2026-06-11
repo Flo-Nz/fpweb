@@ -1,314 +1,128 @@
 import axios from "axios";
-import { getItem, setItem } from "localforage";
-import { deburr } from "lodash";
-import { getUserId } from "./user";
+import { deburr } from "lodash-es";
+import { getApiKey } from "./auth";
 
-export const getApiKey = async () => {
-  try {
-    const userApiKey = await getItem("apikey");
-    if (!userApiKey) {
-      return process.env.API_KEY;
-    }
-    return userApiKey;
-  } catch (error) {
-    return process.env.API_KEY;
-  }
+const api = async (options) => {
+  const apikey = await getApiKey();
+  return axios({
+    baseURL: process.env.API_BASE_URL,
+    headers: { apikey },
+    ...options,
+  });
 };
 
-export const fetchUserInfos = async () => {
-  try {
-    const apikey = await getItem("apikey");
-
-    const user = await axios({
-      method: "get",
-      baseURL: process.env.API_BASE_URL,
-      url: "/user/infos",
-      headers: { apikey },
-    });
-    if (user?.data) {
-      const { _id, username, type, discord, google, avatar } = user.data;
-      await setItem("id", _id.toString());
-      await setItem("username", username);
-      await setItem("avatar", avatar);
-      switch (type) {
-        case "discord":
-          await setItem("discordRoles", discord.roles);
-          await setItem("userId", discord.id);
-          return;
-        case "google":
-          await setItem("discordRoles", []);
-          await setItem("userId", google.id);
-          return;
-        default:
-          return;
-      }
-    }
-  } catch (error) {
-    throw error;
-  }
+// Search
+export const searchOrop = async (title, oropOnly = false) => {
+  const { data } = await api({
+    method: "get",
+    url: "/orop/search",
+    params: { title: deburr(title), oropOnly: oropOnly ? "true" : "false" },
+  });
+  return data;
 };
 
-export const searchOrop = async (query) => {
-  try {
-    const apikey = await getApiKey();
-    const value = await query.queryKey[1];
-    const oropOnly = await query.queryKey[2];
-
-    const { data } = await axios({
-      headers: { apikey },
-      method: "get",
-      baseURL: process.env.API_BASE_URL,
-      url: "/orop/search",
-      params: { title: deburr(value), oropOnly: oropOnly ? "true" : "false" },
-    });
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const userRatings = async (query) => {
-  try {
-    const apikey = await getApiKey();
-
-    const { data } = await axios({
-      headers: { apikey },
-      method: "get",
-      baseURL: process.env.API_BASE_URL,
-      url: "/discordorop/ratings",
-      params: { noLimit: true },
-    });
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const postUserRating = async (title, rating, review) => {
-  try {
-    const apikey = await getApiKey();
-    const body = { title, rating, review };
-
-    const { data } = await axios({
-      headers: { apikey },
-      method: "post",
-      baseURL: process.env.API_BASE_URL,
-      url:
-        apikey === process.env.YOEL_API_KEY ? "/fporop/rating" : "/discordorop",
-      data: body,
-    });
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const removeUserRating = async ({ title, rating, review }) => {
-  try {
-    const apikey = await getApiKey();
-    const params = { title, rating, review };
-
-    const { data } = await axios({
-      headers: { apikey },
-      method: "put",
-      baseURL: process.env.API_BASE_URL,
-      url: "/discordorop/ratings/remove",
-      params,
-    });
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const removeReview = async ({ userId, title }) => {
-  try {
-    const apikey = await getApiKey();
-    const params = { userId, title };
-
-    const { data } = await axios({
-      headers: { apikey },
-      method: "put",
-      baseURL: process.env.API_BASE_URL,
-      url: "/discordorop/reviews/remove",
-      params,
-    });
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const postAskForOrop = async (title) => {
-  try {
-    const apikey = await getApiKey();
-    const params = { title };
-
-    const { data } = await axios({
-      headers: { apikey },
-      method: "post",
-      baseURL: process.env.API_BASE_URL,
-      url: "/orop/ask",
-      params,
-    });
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getTopAskedOrop = async () => {
-  try {
-    const apikey = await getApiKey();
-    const { data } = await axios({
-      headers: { apikey },
-      method: "get",
-      baseURL: process.env.API_BASE_URL,
-      url: "/orop/top/asked",
-    });
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const updateBoardgame = async (id, payload) => {
-  try {
-    const apikey = await getApiKey();
-    const { data } = await axios({
-      headers: { apikey },
-      method: "put",
-      baseURL: process.env.API_BASE_URL,
-      url: `/boardgame/${id}`,
-      data: payload,
-    });
-
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const deleteBoardgame = async (id) => {
-  try {
-    const apikey = await getApiKey();
-    const { data } = await axios({
-      headers: { apikey },
-      method: "delete",
-      baseURL: process.env.API_BASE_URL,
-      url: `/boardgame/${id}`,
-    });
-
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const addBoardgame = async (payload) => {
-  try {
-    const apikey = await getApiKey();
-    const { data } = await axios({
-      headers: { apikey },
-      method: "post",
-      baseURL: process.env.API_BASE_URL,
-      url: `/boardgame`,
-      data: payload,
-    });
-
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getAllOrop = async ({ page = 1, oropOnly }) => {
-  try {
-    const apikey = await getApiKey();
-    const {
-      data: { data: boardgames, currentPage, totalPages, totalDocuments },
-    } = await axios({
-      headers: { apikey },
-      method: "get",
-      baseURL: process.env.API_BASE_URL,
-      url: `/orop/all?`,
-      params: {
-        page,
-        oropOnly: oropOnly ? "true" : "false",
-      },
-    });
-
-    return { boardgames, currentPage, totalPages, totalDocuments };
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getYoutubeOrop = async (id) => {
-  try {
-    const apikey = await getApiKey();
-    const { data } = await axios({
-      headers: { apikey },
-      method: "get",
-      baseURL: process.env.API_BASE_URL,
-      url: `/boardgame/${id}/youtube`,
-    });
-
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getPendingBoardgames = async () => {
-  try {
-    const apikey = await getApiKey();
-    const { data } = await axios({
-      headers: { apikey },
-      method: "get",
-      baseURL: process.env.API_BASE_URL,
-      url: `/boardgame/pending`,
-    });
-
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const validateBoardgame = async (id) => {
-  try {
-    const apikey = await getApiKey();
-    const { data } = await axios({
-      headers: { apikey },
-      method: "get",
-      baseURL: process.env.API_BASE_URL,
-      url: `/boardgame/${id}/validate`,
-    });
-
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
+// Single boardgame
 export const getBoardgame = async (id, options = {}) => {
-  try {
-    const apikey = await getApiKey();
-    const queryString = new URLSearchParams(options).toString();
-    const url = queryString
-      ? `/boardgame/${id}?${queryString}`
-      : `/boardgame/${id}`;
+  const params = new URLSearchParams(options).toString();
+  const url = params ? `/boardgame/${id}?${params}` : `/boardgame/${id}`;
+  const { data } = await api({ method: "get", url });
+  return data;
+};
 
-    const { data } = await axios({
-      headers: { apikey },
-      method: "get",
-      baseURL: process.env.API_BASE_URL,
-      url,
-    });
+// List all with pagination
+export const getAllOrop = async ({ page = 1, oropOnly = false, limit = 24, fpRating, discordRating }) => {
+  const params = { page, oropOnly: oropOnly ? "true" : "false", limit };
+  if (fpRating) params.fpRating = fpRating;
+  if (discordRating) params.discordRating = discordRating;
 
-    return data;
-  } catch (error) {
-    throw error;
-  }
+  const { data } = await api({
+    method: "get",
+    url: "/orop/all",
+    params,
+  });
+  return data;
+};
+
+// Rating (unified endpoint)
+export const postRating = async (title, rating, review) => {
+  const body = { title, rating };
+  if (review) body.review = review;
+  const { data } = await api({
+    method: "post",
+    url: "/rating",
+    data: body,
+  });
+  return data;
+};
+
+// User ratings (paginated)
+export const getUserRatings = async ({ skip = 0, limit = 12 } = {}) => {
+  const { data } = await api({
+    method: "get",
+    url: "/discordorop/ratings",
+    params: { skip, limit },
+  });
+  return data;
+};
+
+// Remove user rating
+export const removeUserRating = async (title) => {
+  const { data } = await api({
+    method: "put",
+    url: "/discordorop/ratings/remove",
+    params: { title, rating: "true" },
+  });
+  return data;
+};
+
+// Update boardgame (scribe only)
+export const updateBoardgame = async (id, payload) => {
+  const { data } = await api({
+    method: "put",
+    url: `/boardgame/${id}`,
+    data: payload,
+  });
+  return data;
+};
+
+// Pending boardgames (scribe only)
+export const getPendingBoardgames = async () => {
+  const { data } = await api({
+    method: "get",
+    url: "/boardgame/pending",
+  });
+  return data;
+};
+
+// Validate a boardgame (scribe only)
+export const validateBoardgame = async (id) => {
+  const { data } = await api({
+    method: "get",
+    url: `/boardgame/${id}/validate`,
+  });
+  return data;
+};
+
+// Delete a boardgame (scribe only)
+export const deleteBoardgame = async (id) => {
+  const { data } = await api({
+    method: "delete",
+    url: `/boardgame/${id}`,
+  });
+  return data;
+};
+
+// Top asked
+export const getTopAsked = async () => {
+  const { data } = await api({ method: "get", url: "/orop/top/asked" });
+  return data;
+};
+
+// BGG Cover
+export const fetchBggCover = async (id) => {
+  const { data } = await api({
+    method: "get",
+    url: `/boardgame/${id}/cover`,
+  });
+  return data;
 };

@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+@theme {
+  /* Fixed accent colors from our Icons8 palette — used for ratings, etc. */
+  --color-fp-rose: #ed7899;
+  --color-fp-green: #72caaf;
+  --color-fp-blue: #85cbf8;
+  --color-fp-gold: #f6d397;
+  --color-fp-orange: #f37331;
+  --color-fp-purple: #8d6c9f;
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

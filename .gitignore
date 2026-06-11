@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+.agents/
+.kilocode/
+.kiro/
+skills-lock.json
