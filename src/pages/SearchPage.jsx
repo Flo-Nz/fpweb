@@ -197,26 +197,6 @@ const SearchPage = () => {
               <p className="text-foreground/50">
                 {intl.formatMessage({ id: "search.noResults" })}
               </p>
-              {user.isLogged && !addedSuccess && (
-                <button
-                  onClick={() => addMutation.mutate(debouncedSearch)}
-                  disabled={addMutation.isPending}
-                  className="flex cursor-pointer items-center gap-2 rounded-lg bg-fp-green px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-                >
-                  <AddIcon size="18" />
-                  {addMutation.isPending ? "Ajout..." : `Ajouter "${debouncedSearch}"`}
-                </button>
-              )}
-              {addedSuccess && (
-                <p className="text-sm text-fp-green">
-                  ✓ Jeu ajouté ! Il sera visible après validation par un scribe.
-                </p>
-              )}
-              {addMutation.isError && (
-                <p className="text-sm text-fp-rose">
-                  {addMutation.error?.response?.data?.error || "Erreur lors de l'ajout"}
-                </p>
-              )}
             </div>
           )}
 
@@ -235,6 +215,31 @@ const SearchPage = () => {
                 ))}
               </div>
             </>
+          )}
+
+          {/* Add boardgame — always shown when there's a search query and user is logged in */}
+          {searchResults && debouncedSearch && user.isLogged && (
+            <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-divider py-4">
+              {!addedSuccess ? (
+                <button
+                  onClick={() => addMutation.mutate(debouncedSearch)}
+                  disabled={addMutation.isPending}
+                  className="flex cursor-pointer items-center gap-2 rounded-lg bg-fp-green/10 px-4 py-2 text-sm font-medium text-fp-green transition-colors hover:bg-fp-green/20 disabled:opacity-50"
+                >
+                  <AddIcon size="18" />
+                  {addMutation.isPending ? "Ajout..." : `Vous ne trouvez pas ? Ajouter "${debouncedSearch}"`}
+                </button>
+              ) : (
+                <p className="text-sm text-fp-green">
+                  ✓ Jeu ajouté ! Il sera visible après validation par un scribe.
+                </p>
+              )}
+              {addMutation.isError && (
+                <p className="text-sm text-fp-rose">
+                  {addMutation.error?.response?.data?.error || "Erreur lors de l'ajout"}
+                </p>
+              )}
+            </div>
           )}
 
           {!debouncedSearch && !searchResults && (
