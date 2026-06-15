@@ -5,10 +5,10 @@ import { Spinner } from "@heroui/react";
 import { Link, Navigate } from "react-router-dom";
 import { getUserRatings, postRating } from "../lib/api";
 import { useUser } from "../context/UserContext";
-import { MyRatingsIcon, SearchIcon } from "../components/icons/Icons";
+import { MyRatingsIcon, SearchIcon, SearchYoutubeIcon } from "../components/icons/Icons";
 import RatingBadge from "../components/RatingBadge";
 import RatingSelector from "../components/RatingSelector";
-import { SearchYoutubeIcon } from "../components/icons/Icons";
+import BoardgameCover from "../components/BoardgameCover";
 
 const PAGE_SIZE = 12;
 
@@ -22,20 +22,25 @@ const MyRatingCard = ({ boardgame, userId, onRatingChange }) => {
   );
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-divider bg-content1 p-4 transition-all">
-      <div className="flex items-start justify-between gap-2">
-        <Link
-          to={`/boardgame/${boardgame._id || boardgame.id}`}
-          className="text-sm font-semibold capitalize leading-tight text-foreground no-underline hover:text-fp-purple"
-        >
-          {title}
-        </Link>
-        {hasYoutubeUrl && (
-          <div className="shrink-0" title="OROP disponible">
-            <SearchYoutubeIcon size="20" />
-          </div>
-        )}
-      </div>
+    <div className="flex gap-3 rounded-xl border border-divider bg-content1 p-3 transition-all">
+      {/* Cover */}
+      <BoardgameCover boardgame={boardgame} size="sm" />
+
+      {/* Content */}
+      <div className="flex flex-1 flex-col gap-2">
+        <div className="flex items-start justify-between gap-2">
+          <Link
+            to={`/boardgame/${boardgame._id || boardgame.id}`}
+            className="text-sm font-semibold capitalize leading-tight text-foreground no-underline hover:text-fp-purple"
+          >
+            {title}
+          </Link>
+          {hasYoutubeUrl && (
+            <div className="shrink-0" title="OROP disponible">
+              <SearchYoutubeIcon size="20" />
+            </div>
+          )}
+        </div>
 
       {/* Current rating + change button */}
       <div className="flex items-center gap-2">
@@ -61,6 +66,7 @@ const MyRatingCard = ({ boardgame, userId, onRatingChange }) => {
           />
         </div>
       )}
+      </div>
     </div>
   );
 };
