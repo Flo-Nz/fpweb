@@ -24,6 +24,7 @@ const SearchPage = () => {
   const fpRating = parseInt(searchParams.get("fp")) || null;
   const discordRating = parseInt(searchParams.get("dc")) || null;
 
+  const [inputValue, setInputValue] = useState(searchValue);
   const [debouncedSearch, setDebouncedSearch] = useState(searchValue);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
@@ -51,25 +52,26 @@ const SearchPage = () => {
     },
   });
 
-  const debouncedSetSearch = useCallback(
+  const debouncedUpdateSearch = useCallback(
     debounce((value) => {
       setDebouncedSearch(value);
       updateParams({ q: value || null });
     }, 400),
-    [setSearchParams]
+    []
   );
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
-    updateParams({ q: value || null });
+    setInputValue(value);
     setAddedSuccess(false);
-    debouncedSetSearch(value);
+    debouncedUpdateSearch(value);
   };
 
-  // Sync debouncedSearch with URL on mount (for back-navigation)
+  // Sync input with URL on mount (for back-navigation)
   useEffect(() => {
     if (searchValue && searchValue !== debouncedSearch) {
       setDebouncedSearch(searchValue);
+      setInputValue(searchValue);
     }
   }, []);
 
@@ -157,7 +159,7 @@ const SearchPage = () => {
       {/* Mode tabs */}
       <div className="mx-auto flex rounded-lg border border-divider bg-content1 p-1">
         <button
-          onClick={() => updateParams({ mode: null })}
+          onClick={() => updateParams({ mode: null, fp: null, dc: null })}
           className={`cursor-pointer rounded-md px-4 py-2 text-sm font-medium transition-colors ${
             mode === "search"
               ? "bg-fp-purple text-white"
@@ -199,13 +201,13 @@ const SearchPage = () => {
               <input
                 type="text"
                 placeholder={intl.formatMessage({ id: "search.placeholder" })}
-                value={searchValue}
+                value={inputValue}
                 onChange={handleSearchChange}
                 className="w-full rounded-xl border border-divider bg-content1 px-5 py-3.5 text-base text-foreground shadow-sm placeholder:text-foreground/30 focus:border-fp-purple focus:outline-none focus:ring-2 focus:ring-fp-purple/20"
               />
-              {searchValue && (
+              {inputValue && (
                 <button
-                  onClick={() => { updateParams({ q: null }); setDebouncedSearch(""); }}
+                  onClick={() => { setInputValue(""); setDebouncedSearch(""); updateParams({ q: null }); }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer rounded-full p-1 text-foreground/40 hover:text-foreground"
                 >
                   ✕
