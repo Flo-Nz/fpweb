@@ -75,6 +75,16 @@ export const removeUserRating = async (title) => {
   return data;
 };
 
+// Remove only the review text (keep the rating)
+export const removeUserReview = async (title) => {
+  const { data } = await api({
+    method: "put",
+    url: "/discordorop/ratings/remove",
+    params: { title, review: "true" },
+  });
+  return data;
+};
+
 // Update boardgame (scribe only)
 export const updateBoardgame = async (id, payload) => {
   const { data } = await api({

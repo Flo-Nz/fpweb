@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useIntl } from "react-intl";
 import { Spinner } from "@heroui/react";
-import { getBoardgame, postRating } from "../lib/api";
+import { getBoardgame, postRating, removeUserReview } from "../lib/api";
 import { useUser } from "../context/UserContext";
 import { canEdit } from "../lib/auth";
 import RatingBadge from "../components/RatingBadge";
@@ -49,6 +49,13 @@ const BoardgamePage = () => {
   const rateMutation = useMutation({
     mutationFn: ({ rating, review }) =>
       postRating(boardgame.title[0], rating, review),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["boardgame", id] });
+    },
+  });
+
+  const deleteReviewMutation = useMutation({
+    mutationFn: () => removeUserReview(boardgame.title[0]),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["boardgame", id] });
     },
@@ -206,7 +213,9 @@ const BoardgamePage = () => {
       <ReviewSection
         ratings={ratings}
         onSubmitReview={(review) => rateMutation.mutate({ rating: userRating?.rating || 3, review })}
-        isSubmitting={rateMutation.isPending}
+        onEditReview={(newText) => rateMutation.mutate({ rating: userRating?.rating || 3, review: newText })}
+        onDeleteReview={() => deleteReviewMutation.mutate()}
+        isSubmitting={rateMutation.isPending || deleteReviewMutation.isPending}
       />
     </div>
   );
