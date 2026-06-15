@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Spinner } from "@heroui/react";
 import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useIntl } from "react-intl";
@@ -14,15 +15,33 @@ const SearchPage = () => {
   const intl = useIntl();
   const { user } = useUser();
   const queryClient = useQueryClient();
-  const [mode, setMode] = useState("search"); // "search" | "browse"
-  const [searchValue, setSearchValue] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [oropOnly, setOropOnly] = useState(false);
-  const [fpRating, setFpRating] = useState(null);
-  const [discordRating, setDiscordRating] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Persist state in URL for back-navigation
+  const mode = searchParams.get("mode") || "search";
+  const searchValue = searchParams.get("q") || "";
+  const oropOnly = searchParams.get("orop") === "1";
+  const fpRating = parseInt(searchParams.get("fp")) || null;
+  const discordRating = parseInt(searchParams.get("dc")) || null;
+
+  const [debouncedSearch, setDebouncedSearch] = useState(searchValue);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
   const observerRef = useRef(null);
+
+  const updateParams = (updates) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      Object.entries(updates).forEach(([key, value]) => {
+        if (value === null || value === undefined || value === "" || value === false) {
+          next.delete(key);
+        } else {
+          next.set(key, value);
+        }
+      });
+      return next;
+    }, { replace: true });
+  };
 
   const addMutation = useMutation({
     mutationFn: (title) => addBoardgame(title),
@@ -33,16 +52,26 @@ const SearchPage = () => {
   });
 
   const debouncedSetSearch = useCallback(
-    debounce((value) => setDebouncedSearch(value), 400),
-    []
+    debounce((value) => {
+      setDebouncedSearch(value);
+      updateParams({ q: value || null });
+    }, 400),
+    [setSearchParams]
   );
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
-    setSearchValue(value);
+    updateParams({ q: value || null });
     setAddedSuccess(false);
     debouncedSetSearch(value);
   };
+
+  // Sync debouncedSearch with URL on mount (for back-navigation)
+  useEffect(() => {
+    if (searchValue && searchValue !== debouncedSearch) {
+      setDebouncedSearch(searchValue);
+    }
+  }, []);
 
   // Search query
   const { data: searchResults, isLoading: isSearching } = useQuery({
@@ -128,7 +157,7 @@ const SearchPage = () => {
       {/* Mode tabs */}
       <div className="mx-auto flex rounded-lg border border-divider bg-content1 p-1">
         <button
-          onClick={() => setMode("search")}
+          onClick={() => updateParams({ mode: null })}
           className={`cursor-pointer rounded-md px-4 py-2 text-sm font-medium transition-colors ${
             mode === "search"
               ? "bg-fp-purple text-white"
@@ -138,7 +167,7 @@ const SearchPage = () => {
           🔍 Rechercher
         </button>
         <button
-          onClick={() => setMode("browse")}
+          onClick={() => updateParams({ mode: "browse" })}
           className={`cursor-pointer rounded-md px-4 py-2 text-sm font-medium transition-colors ${
             mode === "browse"
               ? "bg-fp-purple text-white"
@@ -154,7 +183,7 @@ const SearchPage = () => {
         <input
           type="checkbox"
           checked={oropOnly}
-          onChange={() => setOropOnly(!oropOnly)}
+          onChange={() => updateParams({ orop: oropOnly ? null : "1" })}
           className="h-4 w-4 rounded accent-fp-purple"
         />
         <span className="text-sm text-foreground/50">
@@ -176,7 +205,7 @@ const SearchPage = () => {
               />
               {searchValue && (
                 <button
-                  onClick={() => { setSearchValue(""); setDebouncedSearch(""); }}
+                  onClick={() => { updateParams({ q: null }); setDebouncedSearch(""); }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer rounded-full p-1 text-foreground/40 hover:text-foreground"
                 >
                   ✕
@@ -260,7 +289,7 @@ const SearchPage = () => {
               {[1, 2, 3, 4, 5].map((r) => (
                 <button
                   key={`fp-${r}`}
-                  onClick={() => setFpRating(fpRating === r ? null : r)}
+                  onClick={() => updateParams({ fp: fpRating === r ? null : r })}
                   className={`cursor-pointer rounded-full p-0.5 transition-all ${
                     fpRating === r
                       ? "ring-2 ring-fp-purple ring-offset-1 ring-offset-background"
@@ -276,7 +305,7 @@ const SearchPage = () => {
               {[1, 2, 3, 4, 5].map((r) => (
                 <button
                   key={`discord-${r}`}
-                  onClick={() => setDiscordRating(discordRating === r ? null : r)}
+                  onClick={() => updateParams({ dc: discordRating === r ? null : r })}
                   className={`cursor-pointer rounded-full p-0.5 transition-all ${
                     discordRating === r
                       ? "ring-2 ring-fp-purple ring-offset-1 ring-offset-background"
@@ -289,7 +318,7 @@ const SearchPage = () => {
             </div>
             {(fpRating || discordRating) && (
               <button
-                onClick={() => { setFpRating(null); setDiscordRating(null); }}
+                onClick={() => updateParams({ fp: null, dc: null })}
                 className="cursor-pointer rounded-md px-2 py-1 text-xs text-foreground/50 transition-colors hover:bg-content2 hover:text-foreground"
               >
                 ✕ Réinitialiser les filtres
