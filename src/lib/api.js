@@ -136,3 +136,13 @@ export const addBoardgame = async (title) => {
   });
   return data;
 };
+
+// Latest reviews
+export const getLatestReviews = async () => {
+  const { data } = await api({
+    method: "get",
+    url: "/orop/reviews/latest",
+    params: { limit: 6 },
+  });
+  return data;
+};

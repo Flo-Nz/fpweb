@@ -3,9 +3,10 @@ import { useSearchParams } from "react-router-dom";
 import { Spinner } from "@heroui/react";
 import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useIntl } from "react-intl";
-import { searchOrop, getAllOrop, addBoardgame } from "../lib/api";
+import { searchOrop, getAllOrop, addBoardgame, getLatestReviews } from "../lib/api";
 import { useUser } from "../context/UserContext";
 import BoardgameCard from "../components/BoardgameCard";
+import LatestReviews from "../components/LatestReviews";
 import { DbIcon, NotFoundIcon, AddIcon } from "../components/icons/Icons";
 import { debounce } from "lodash-es";
 
@@ -274,9 +275,7 @@ const SearchPage = () => {
           )}
 
           {!debouncedSearch && !searchResults && (
-            <div className="flex flex-col items-center gap-2 py-8 text-foreground/30">
-              <p className="text-lg">Tapez le nom d&apos;un jeu pour commencer</p>
-            </div>
+            <LatestReviews />
           )}
         </>
       )}
