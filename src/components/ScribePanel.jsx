@@ -9,8 +9,10 @@ const ScribePanel = ({ boardgame }) => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingCover, setIsEditingCover] = useState(false);
+  const [isEditingYoutube, setIsEditingYoutube] = useState(false);
   const [titles, setTitles] = useState([]);
   const [coverUrl, setCoverUrl] = useState("");
+  const [youtubeUrl, setYoutubeUrl] = useState("");
 
   const id = boardgame._id || boardgame.id;
 
@@ -19,6 +21,7 @@ const ScribePanel = ({ boardgame }) => {
       setTitles([...boardgame.title]);
     }
     setCoverUrl(boardgame?.coverUrl || "");
+    setYoutubeUrl(boardgame?.fpOrop?.youtubeUrl || "");
   }, [boardgame]);
 
   const mutation = useMutation({
@@ -73,6 +76,11 @@ const ScribePanel = ({ boardgame }) => {
     setIsEditingCover(false);
   };
 
+  const handleSaveYoutube = () => {
+    mutation.mutate({ "fpOrop.youtubeUrl": youtubeUrl || null });
+    setIsEditingYoutube(false);
+  };
+
   if (!isEditing) {
     return (
       <div className="rounded-xl border border-dashed border-fp-purple/30 bg-fp-purple/5 p-4">
@@ -97,6 +105,12 @@ const ScribePanel = ({ boardgame }) => {
               Modifier la cover
             </button>
             <button
+              onClick={() => setIsEditingYoutube(!isEditingYoutube)}
+              className="cursor-pointer rounded-lg bg-fp-purple/10 px-3 py-1.5 text-xs font-medium text-fp-purple transition-colors hover:bg-fp-purple/20"
+            >
+              Modifier YouTube
+            </button>
+            <button
               onClick={handleDelete}
               disabled={deleteMutation.isPending}
               className="flex cursor-pointer items-center gap-1 rounded-lg bg-fp-rose/10 px-3 py-1.5 text-xs font-medium text-fp-rose transition-colors hover:bg-fp-rose/20 disabled:opacity-50"
@@ -118,6 +132,26 @@ const ScribePanel = ({ boardgame }) => {
             />
             <button
               onClick={handleSaveCover}
+              disabled={mutation.isPending}
+              className="flex cursor-pointer items-center gap-1 rounded-lg bg-fp-purple px-3 py-1.5 text-xs font-medium text-white hover:opacity-90 disabled:opacity-50"
+            >
+              <SaveIcon size="14" />
+              OK
+            </button>
+          </div>
+        )}
+        {/* YouTube URL editor */}
+        {isEditingYoutube && (
+          <div className="mt-3 flex items-center gap-2 border-t border-divider pt-3">
+            <input
+              type="text"
+              value={youtubeUrl}
+              onChange={(e) => setYoutubeUrl(e.target.value)}
+              placeholder="URL YouTube (vide pour supprimer)"
+              className="flex-1 rounded-lg border border-divider bg-background px-3 py-1.5 text-xs text-foreground placeholder:text-foreground/30 focus:border-fp-purple focus:outline-none"
+            />
+            <button
+              onClick={handleSaveYoutube}
               disabled={mutation.isPending}
               className="flex cursor-pointer items-center gap-1 rounded-lg bg-fp-purple px-3 py-1.5 text-xs font-medium text-white hover:opacity-90 disabled:opacity-50"
             >
